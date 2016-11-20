@@ -2,12 +2,11 @@ package cz.cvut.fel.aos.service;
 
 import cz.cvut.fel.aos.dao.GenericEntityDao;
 import cz.cvut.fel.aos.entities.DestinationEntity;
-import cz.cvut.fel.aos.resource.OrderBy;
+import cz.cvut.fel.aos.resource.params.QueryParams;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Transactional
@@ -15,8 +14,8 @@ public class DestinationService {
 
     private final GenericEntityDao<DestinationEntity> destinationEntityDao;
 
-    public List<DestinationEntity> getAll(Optional<OrderBy> orderBy) {
-        return destinationEntityDao.getAll(orderBy);
+    public List<DestinationEntity> getAll(QueryParams queryParams) {
+        return destinationEntityDao.getAll(queryParams);
     }
 
     public DestinationEntity get(int id) {

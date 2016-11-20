@@ -1,4 +1,4 @@
-package cz.cvut.fel.aos.resource;
+package cz.cvut.fel.aos.resource.params.sorting;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;

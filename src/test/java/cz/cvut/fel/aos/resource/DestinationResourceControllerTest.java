@@ -3,6 +3,9 @@ package cz.cvut.fel.aos.resource;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import cz.cvut.fel.aos.config.RestConfig;
 import cz.cvut.fel.aos.entities.DestinationEntity;
+import cz.cvut.fel.aos.resource.params.QueryParams;
+import cz.cvut.fel.aos.resource.params.sorting.Order;
+import cz.cvut.fel.aos.resource.params.sorting.OrderBy;
 import cz.cvut.fel.aos.service.DestinationService;
 import cz.cvut.fel.aos.test.MockServiceConfig;
 import org.junit.Before;
@@ -19,8 +22,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
-
-import java.util.Optional;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -55,7 +56,7 @@ public class DestinationResourceControllerTest {
                 MockMvcRequestBuilders.get("/destination/")
                         .header("X-Order", "name:asc")
         );
-        Mockito.verify(destinationServiceMock).getAll(Optional.of(new OrderBy("name", Order.ASC)));
+        Mockito.verify(destinationServiceMock).getAll(new QueryParams().setOrderBy(new OrderBy("name", Order.ASC)));
     }
 
     @Test

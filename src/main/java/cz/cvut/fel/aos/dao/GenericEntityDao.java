@@ -1,17 +1,19 @@
 package cz.cvut.fel.aos.dao;
 
-import cz.cvut.fel.aos.resource.OrderBy;
+import cz.cvut.fel.aos.resource.params.QueryParams;
+import cz.cvut.fel.aos.resource.params.pagination.Pagination;
+import cz.cvut.fel.aos.resource.params.sorting.OrderBy;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Path;
 import java.io.Serializable;
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public class GenericEntityDao<ENTITY extends Serializable> {
@@ -47,19 +49,23 @@ public class GenericEntityDao<ENTITY extends Serializable> {
     }
 
     public List<ENTITY> getAll() {
-        return getAll(Optional.empty());
+        return getAll(new QueryParams());
     }
 
-    public List<ENTITY> getAll(Optional<OrderBy> orderBy) {
+    public List<ENTITY> getAll(QueryParams queryParams) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<ENTITY> q = cb.createQuery(cls);
         Path<ENTITY> path = (q.from(cls));
 
         q.select(path);
-        if (orderBy.isPresent()) {
-            q.orderBy(getOrder(path, cb, orderBy.get()));
+        if (queryParams.getOrderBy().isPresent()) {
+            q.orderBy(getOrder(path, cb, queryParams.getOrderBy().get()));
         }
-        return em.createQuery(q).getResultList();
+        TypedQuery<ENTITY> typedQuery = em.createQuery(q);
+        if (queryParams.getPagination().isPresent()) {
+            typedQuery = pagination(typedQuery, queryParams.getPagination().get());
+        }
+        return typedQuery.getResultList();
     }
 
     private Order getOrder(Path<ENTITY> path, CriteriaBuilder cb, OrderBy orderBy) {
@@ -72,6 +78,10 @@ public class GenericEntityDao<ENTITY extends Serializable> {
             default:
                 throw new IllegalStateException();
         }
+    }
+
+    private TypedQuery<ENTITY> pagination(TypedQuery<ENTITY> typedQuery, Pagination pagination) {
+        return typedQuery.setFirstResult(pagination.getOffset()).setMaxResults(pagination.getBase());
     }
 
 }

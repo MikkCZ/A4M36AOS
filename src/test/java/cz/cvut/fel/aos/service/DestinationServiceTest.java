@@ -3,6 +3,7 @@ package cz.cvut.fel.aos.service;
 import cz.cvut.fel.aos.config.ServiceConfig;
 import cz.cvut.fel.aos.dao.GenericEntityDao;
 import cz.cvut.fel.aos.entities.DestinationEntity;
+import cz.cvut.fel.aos.resource.params.QueryParams;
 import cz.cvut.fel.aos.test.AbstractDatabaseTest;
 import org.junit.Before;
 import org.junit.Test;
@@ -10,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 
 import java.util.List;
-import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -40,7 +40,7 @@ public class DestinationServiceTest extends AbstractDatabaseTest {
             destinationEntityDao.create(DestinationEntity.builder().name("Berlin").build());
             destinationEntityDao.create(DestinationEntity.builder().name("London").build());
         });
-        List<DestinationEntity> loaded = destinationService.getAll(Optional.empty());
+        List<DestinationEntity> loaded = destinationService.getAll(new QueryParams());
         assertThat(loaded, hasSize(4));
     }
 
@@ -66,9 +66,9 @@ public class DestinationServiceTest extends AbstractDatabaseTest {
     public void deletes() {
         DestinationEntity entity = DestinationEntity.builder().name("Prague").build();
         destinationService.create(entity);
-        assertThat(destinationService.getAll(Optional.empty()), hasSize(1));
+        assertThat(destinationService.getAll(new QueryParams()), hasSize(1));
         destinationService.delete(entity.getId());
-        assertThat(destinationService.getAll(Optional.empty()), hasSize(0));
+        assertThat(destinationService.getAll(new QueryParams()), hasSize(0));
     }
 
 }
