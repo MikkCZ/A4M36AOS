@@ -7,6 +7,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/destination")
@@ -16,8 +17,9 @@ public class DestinationResourceController {
     private DestinationService destinationService;
 
     @RequestMapping(value = "/", method = RequestMethod.GET, produces={MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public List<DestinationEntity> getAllDestinations() {
-        return destinationService.getAll();
+    public List<DestinationEntity> getAllDestinations(@RequestHeader(value = "X-Order", required = false) String xOrder) {
+        Optional<OrderBy> orderBy = OrderBy.fromXOrder(xOrder);
+        return destinationService.getAll(orderBy);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces={MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})

@@ -20,6 +20,8 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.util.Optional;
+
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -49,8 +51,11 @@ public class DestinationResourceControllerTest {
 
     @Test
     public void getsAllDestinations() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/destination/"));
-        Mockito.verify(destinationServiceMock).getAll();
+        mockMvc.perform(
+                MockMvcRequestBuilders.get("/destination/")
+                        .header("X-Order", "name:asc")
+        );
+        Mockito.verify(destinationServiceMock).getAll(Optional.of(new OrderBy("name", Order.ASC)));
     }
 
     @Test

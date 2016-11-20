@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -39,7 +40,7 @@ public class DestinationServiceTest extends AbstractDatabaseTest {
             destinationEntityDao.create(DestinationEntity.builder().name("Berlin").build());
             destinationEntityDao.create(DestinationEntity.builder().name("London").build());
         });
-        List<DestinationEntity> loaded = destinationService.getAll();
+        List<DestinationEntity> loaded = destinationService.getAll(Optional.empty());
         assertThat(loaded, hasSize(4));
     }
 
@@ -65,9 +66,9 @@ public class DestinationServiceTest extends AbstractDatabaseTest {
     public void deletes() {
         DestinationEntity entity = DestinationEntity.builder().name("Prague").build();
         destinationService.create(entity);
-        assertThat(destinationService.getAll(), hasSize(1));
+        assertThat(destinationService.getAll(Optional.empty()), hasSize(1));
         destinationService.delete(entity.getId());
-        assertThat(destinationService.getAll(), hasSize(0));
+        assertThat(destinationService.getAll(Optional.empty()), hasSize(0));
     }
 
 }
