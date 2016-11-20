@@ -11,6 +11,7 @@ import java.io.Serializable;
 public class DestinationEntity implements Serializable {
 
     @Getter
+    @Setter
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
