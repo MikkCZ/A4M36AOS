@@ -4,6 +4,7 @@ import cz.cvut.fel.aos.config.ServiceConfig;
 import cz.cvut.fel.aos.dao.GenericEntityDao;
 import cz.cvut.fel.aos.entities.DestinationEntity;
 import cz.cvut.fel.aos.test.AbstractDatabaseTest;
+import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -22,6 +23,13 @@ public class DestinationServiceTest extends AbstractDatabaseTest {
 
     @Autowired
     private DestinationService destinationService;
+
+    @Before
+    public void setUp() {
+        executeInTransaction(() -> {
+            destinationEntityDao.getAll().stream().forEach(destinationEntityDao::delete);
+        });
+    }
 
     @Test
     public void getsAll() {
