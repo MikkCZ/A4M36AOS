@@ -1,10 +1,14 @@
 package cz.cvut.fel.aos.resource;
 
 import cz.cvut.fel.aos.entities.DestinationEntity;
+import cz.cvut.fel.aos.resource.pages.Page;
 import cz.cvut.fel.aos.resource.params.QueryParams;
 import cz.cvut.fel.aos.service.DestinationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,7 +24,7 @@ public class DestinationResourceController {
     private DestinationService destinationService;
 
     @RequestMapping(value = "/", method = RequestMethod.GET, produces={MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public List<DestinationEntity> getAllDestinations(
+    public ResponseEntity<List<DestinationEntity>> getAllDestinations(
             @RequestHeader(value = "X-Order", required = false) String xOrder,
             @RequestHeader(value = "X-Base", required = false) Integer xBase,
             @RequestHeader(value = "X-Offset", defaultValue = "0") Integer xOffset
@@ -28,7 +32,10 @@ public class DestinationResourceController {
         QueryParams queryParams = new QueryParams()
                 .setOrderBy(fromXOrder(xOrder))
                 .setPagination(fromHeaders(xBase, xOffset));
-        return destinationService.getAll(queryParams);
+        Page<DestinationEntity> results = destinationService.getAll(queryParams);
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add("X-Count-records", results.getCount().toString());
+        return new ResponseEntity(results.getResults(), httpHeaders, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces={MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})

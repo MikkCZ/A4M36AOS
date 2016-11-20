@@ -40,7 +40,7 @@ public class DestinationServiceTest extends AbstractDatabaseTest {
             destinationEntityDao.create(DestinationEntity.builder().name("Berlin").build());
             destinationEntityDao.create(DestinationEntity.builder().name("London").build());
         });
-        List<DestinationEntity> loaded = destinationService.getAll(new QueryParams());
+        List<DestinationEntity> loaded = destinationService.getAll(new QueryParams()).getResults();
         assertThat(loaded, hasSize(4));
     }
 
@@ -66,9 +66,9 @@ public class DestinationServiceTest extends AbstractDatabaseTest {
     public void deletes() {
         DestinationEntity entity = DestinationEntity.builder().name("Prague").build();
         destinationService.create(entity);
-        assertThat(destinationService.getAll(new QueryParams()), hasSize(1));
+        assertThat(destinationService.getAll(new QueryParams()).getResults(), hasSize(1));
         destinationService.delete(entity.getId());
-        assertThat(destinationService.getAll(new QueryParams()), hasSize(0));
+        assertThat(destinationService.getAll(new QueryParams()).getResults(), hasSize(0));
     }
 
 }

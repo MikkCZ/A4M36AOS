@@ -2,11 +2,10 @@ package cz.cvut.fel.aos.service;
 
 import cz.cvut.fel.aos.dao.GenericEntityDao;
 import cz.cvut.fel.aos.entities.DestinationEntity;
+import cz.cvut.fel.aos.resource.pages.Page;
 import cz.cvut.fel.aos.resource.params.QueryParams;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @RequiredArgsConstructor
 @Transactional
@@ -14,8 +13,8 @@ public class DestinationService {
 
     private final GenericEntityDao<DestinationEntity> destinationEntityDao;
 
-    public List<DestinationEntity> getAll(QueryParams queryParams) {
-        return destinationEntityDao.getAll(queryParams);
+    public Page<DestinationEntity> getAll(QueryParams queryParams) {
+        return new Page(destinationEntityDao.getAll(queryParams), destinationEntityDao.getAllCount());
     }
 
     public DestinationEntity get(int id) {

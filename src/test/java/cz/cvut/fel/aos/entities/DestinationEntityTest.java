@@ -6,6 +6,7 @@ import cz.cvut.fel.aos.resource.params.pagination.Pagination;
 import cz.cvut.fel.aos.resource.params.sorting.Order;
 import cz.cvut.fel.aos.resource.params.sorting.OrderBy;
 import cz.cvut.fel.aos.test.AbstractDatabaseTest;
+import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -19,6 +20,13 @@ public class DestinationEntityTest extends AbstractDatabaseTest {
 
     @Autowired
     private GenericEntityDao<DestinationEntity> destinationEntityDao;
+
+    @Before
+    public void setUp() {
+        executeInTransaction(() -> {
+            destinationEntityDao.getAll().stream().forEach(destinationEntityDao::delete);
+        });
+    }
 
     @Test
     public void createAndFind() throws Exception {
@@ -45,6 +53,7 @@ public class DestinationEntityTest extends AbstractDatabaseTest {
         });
         executeInTransaction(() -> {
             List<DestinationEntity> sorted = destinationEntityDao.getAll(new QueryParams().setOrderBy(new OrderBy("name", Order.ASC)));
+            assertThat(destinationEntityDao.getAllCount(), is(4L));
             assertThat(sorted, hasSize(4));
             assertThat(sorted.get(0).getName(), is("Berlin"));
             assertThat(sorted.get(1).getName(), is("Brno"));
@@ -67,6 +76,7 @@ public class DestinationEntityTest extends AbstractDatabaseTest {
         });
         executeInTransaction(() -> {
             List<DestinationEntity> sorted = destinationEntityDao.getAll(new QueryParams().setPagination(new Pagination(2, 1)));
+            assertThat(destinationEntityDao.getAllCount(), is(4L));
             assertThat(sorted, hasSize(2));
         });
     }

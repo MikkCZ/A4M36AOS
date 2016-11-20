@@ -55,7 +55,7 @@ public class GenericEntityDao<ENTITY extends Serializable> {
     public List<ENTITY> getAll(QueryParams queryParams) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<ENTITY> q = cb.createQuery(cls);
-        Path<ENTITY> path = (q.from(cls));
+        Path<ENTITY> path = q.from(cls);
 
         q.select(path);
         if (queryParams.getOrderBy().isPresent()) {
@@ -66,6 +66,15 @@ public class GenericEntityDao<ENTITY extends Serializable> {
             typedQuery = pagination(typedQuery, queryParams.getPagination().get());
         }
         return typedQuery.getResultList();
+    }
+
+    public long getAllCount() {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Long> q = cb.createQuery(Long.class);
+        Path<ENTITY> path = q.from(cls);
+
+        q.select(cb.count(path));
+        return em.createQuery(q).getSingleResult();
     }
 
     private Order getOrder(Path<ENTITY> path, CriteriaBuilder cb, OrderBy orderBy) {

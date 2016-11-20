@@ -1,9 +1,12 @@
 package cz.cvut.fel.aos.resource;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.ImmutableList;
 import cz.cvut.fel.aos.config.RestConfig;
 import cz.cvut.fel.aos.entities.DestinationEntity;
+import cz.cvut.fel.aos.resource.pages.Page;
 import cz.cvut.fel.aos.resource.params.QueryParams;
+import cz.cvut.fel.aos.resource.params.pagination.Pagination;
 import cz.cvut.fel.aos.resource.params.sorting.Order;
 import cz.cvut.fel.aos.resource.params.sorting.OrderBy;
 import cz.cvut.fel.aos.service.DestinationService;
@@ -14,6 +17,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -23,8 +27,12 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.util.List;
+
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasSize;
+import static org.mockito.Matchers.any;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -51,12 +59,32 @@ public class DestinationResourceControllerTest {
     }
 
     @Test
-    public void getsAllDestinations() throws Exception {
+    public void getsAllDestinationsWithOrder() throws Exception {
+        Mockito.when(destinationServiceMock.getAll(any())).thenReturn(new Page(ImmutableList.of(), 0L));
         mockMvc.perform(
                 MockMvcRequestBuilders.get("/destination/")
                         .header("X-Order", "name:asc")
         );
         Mockito.verify(destinationServiceMock).getAll(new QueryParams().setOrderBy(new OrderBy("name", Order.ASC)));
+    }
+
+    @Test
+    public void getsAllDestinationsWithPagination() throws Exception {
+        Page<DestinationEntity> toReturn = new Page(
+                ImmutableList.of(DestinationEntity.builder().name("Prague").build()),
+                42L
+        );
+        QueryParams queryParams = new QueryParams().setPagination(new Pagination(1, 1));
+        Mockito.when(destinationServiceMock.getAll(queryParams)).thenReturn(toReturn);
+        MockHttpServletResponse response = mockMvc.perform(
+                MockMvcRequestBuilders.get("/destination/")
+                        .header("X-Base", 1)
+                        .header("X-Offset", 1)
+        ).andReturn().getResponse();
+        Mockito.verify(destinationServiceMock).getAll(queryParams);
+        List<DestinationEntity> returned = objectMapper.readValue(response.getContentAsString(), List.class);
+        assertThat(returned, hasSize(1));
+        assertThat(Long.valueOf(response.getHeader("X-Count-records")), is(42L));
     }
 
     @Test
