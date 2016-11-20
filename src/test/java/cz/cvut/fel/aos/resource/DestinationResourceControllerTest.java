@@ -1,6 +1,7 @@
 package cz.cvut.fel.aos.resource;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.google.common.collect.ImmutableList;
 import cz.cvut.fel.aos.config.RestConfig;
 import cz.cvut.fel.aos.entities.DestinationEntity;
@@ -44,8 +45,9 @@ public class DestinationResourceControllerTest {
     @Autowired
     private DestinationService destinationServiceMock;
 
-    @Autowired
-    private ObjectMapper objectMapper;
+    private ObjectMapper jsonMapper = new ObjectMapper();
+
+    private ObjectMapper xmlMapper = new XmlMapper();
 
     private MockMvc mockMvc;
 
@@ -82,31 +84,56 @@ public class DestinationResourceControllerTest {
                         .header("X-Offset", 1)
         ).andReturn().getResponse();
         Mockito.verify(destinationServiceMock).getAll(queryParams);
-        List<DestinationEntity> returned = objectMapper.readValue(response.getContentAsString(), List.class);
+        List<DestinationEntity> returned = jsonMapper.readValue(response.getContentAsString(), List.class);
         assertThat(returned, hasSize(1));
         assertThat(Long.valueOf(response.getHeader("X-Count-records")), is(42L));
     }
 
     @Test
-    public void creates() throws Exception {
+    public void createsJson() throws Exception {
         DestinationEntity entity = DestinationEntity.builder().name("Prague").build();
         mockMvc.perform(
                 MockMvcRequestBuilders.post("/destination/")
-                        .content(objectMapper.writeValueAsString(entity))
+                        .content(jsonMapper.writeValueAsString(entity))
                         .contentType(MediaType.APPLICATION_JSON)
         );
         Mockito.verify(destinationServiceMock).create(entity);
     }
 
     @Test
-    public void gets() throws Exception {
+    public void createsXml() throws Exception {
+        DestinationEntity entity = DestinationEntity.builder().name("Prague").build();
+        mockMvc.perform(
+                MockMvcRequestBuilders.post("/destination/")
+                        .content(xmlMapper.writeValueAsString(entity))
+                        .contentType(MediaType.APPLICATION_XML)
+        );
+        Mockito.verify(destinationServiceMock).create(entity);
+    }
+
+    @Test
+    public void getsJson() throws Exception {
         DestinationEntity toReturn = DestinationEntity.builder().id(42).name("Prague").build();
         Mockito.when(destinationServiceMock.get(toReturn.getId())).thenReturn(toReturn);
-        String response = mockMvc.perform(MockMvcRequestBuilders.get("/destination/42"))
+        String response = mockMvc.perform(MockMvcRequestBuilders.get("/destination/42")
+                .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andReturn().getResponse().getContentAsString();
         Mockito.verify(destinationServiceMock).get(toReturn.getId());
-        DestinationEntity returned = objectMapper.readValue(response, DestinationEntity.class);
+        DestinationEntity returned = jsonMapper.readValue(response, DestinationEntity.class);
+        assertThat(returned.getName(), is(toReturn.getName()));
+    }
+
+    @Test
+    public void getsXml() throws Exception {
+        DestinationEntity toReturn = DestinationEntity.builder().id(42).name("Prague").build();
+        Mockito.when(destinationServiceMock.get(toReturn.getId())).thenReturn(toReturn);
+        String response = mockMvc.perform(MockMvcRequestBuilders.get("/destination/42")
+                .accept(MediaType.APPLICATION_XML))
+                .andExpect(status().isOk())
+                .andReturn().getResponse().getContentAsString();
+        Mockito.verify(destinationServiceMock).get(toReturn.getId());
+        DestinationEntity returned = xmlMapper.readValue(response, DestinationEntity.class);
         assertThat(returned.getName(), is(toReturn.getName()));
     }
 
