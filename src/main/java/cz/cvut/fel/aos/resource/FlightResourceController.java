@@ -9,10 +9,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -39,6 +36,16 @@ public class FlightResourceController {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add("X-Count-records", results.getCount().toString());
         return new ResponseEntity(results.getResults(), httpHeaders, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces={MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public FlightEntity getFlight(@PathVariable("id") int id) {
+        return flightService.get(id);
+    }
+
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+    public void deleteFlight(@PathVariable("id") int id) {
+        flightService.delete(id);
     }
 
 }

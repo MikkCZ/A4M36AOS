@@ -18,6 +18,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
@@ -34,6 +35,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.Matchers.any;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
@@ -42,7 +44,7 @@ import static org.mockito.Matchers.any;
 public class FlightResourceControllerTest {
 
     @Autowired
-    private FlightService flightService;
+    private FlightService flightServiceMock;
 
     private ObjectMapper jsonMapper = new ObjectMapper();
 
@@ -55,18 +57,18 @@ public class FlightResourceControllerTest {
 
     @Before
     public void setUp() {
-        Mockito.reset(flightService);
+        Mockito.reset(flightServiceMock);
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
     }
 
     @Test
     public void getsAllFlightsWithOrder() throws Exception {
-        Mockito.when(flightService.getAll(any())).thenReturn(new Page(ImmutableList.of(), 0L));
+        Mockito.when(flightServiceMock.getAll(any())).thenReturn(new Page(ImmutableList.of(), 0L));
         mockMvc.perform(
                 MockMvcRequestBuilders.get("/flight/")
                         .header("X-Order", "name:asc")
         );
-        Mockito.verify(flightService).getAll(new QueryParams().setOrderBy(new OrderBy("name", Order.ASC)));
+        Mockito.verify(flightServiceMock).getAll(new QueryParams().setOrderBy(new OrderBy("name", Order.ASC)));
     }
 
     @Test
@@ -80,16 +82,42 @@ public class FlightResourceControllerTest {
                 42L
         );
         QueryParams queryParams = new QueryParams().setPagination(new Pagination(1, 1));
-        Mockito.when(flightService.getAll(queryParams)).thenReturn(toReturn);
+        Mockito.when(flightServiceMock.getAll(queryParams)).thenReturn(toReturn);
         MockHttpServletResponse response = mockMvc.perform(
                 MockMvcRequestBuilders.get("/flight/")
                         .header("X-Base", 1)
                         .header("X-Offset", 1)
         ).andReturn().getResponse();
-        Mockito.verify(flightService).getAll(queryParams);
+        Mockito.verify(flightServiceMock).getAll(queryParams);
         List<DestinationEntity> returned = jsonMapper.readValue(response.getContentAsString(), List.class);
         assertThat(returned, hasSize(1));
         assertThat(Long.valueOf(response.getHeader("X-Count-records")), is(42L));
+    }
+
+    @Test
+    public void getsJson() throws Exception {
+        FlightEntity toReturn = FlightEntity.builder().id(42).name("Prague").build();
+        Mockito.when(flightServiceMock.get(toReturn.getId())).thenReturn(toReturn);
+        String response = mockMvc.perform(MockMvcRequestBuilders.get("/flight/42")
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andReturn().getResponse().getContentAsString();
+        Mockito.verify(flightServiceMock).get(toReturn.getId());
+        FlightEntity returned = jsonMapper.readValue(response, FlightEntity.class);
+        assertThat(returned.getName(), is(toReturn.getName()));
+    }
+
+    @Test
+    public void getsXml() throws Exception {
+        FlightEntity toReturn = FlightEntity.builder().id(42).name("Prague").build();
+        Mockito.when(flightServiceMock.get(toReturn.getId())).thenReturn(toReturn);
+        String response = mockMvc.perform(MockMvcRequestBuilders.get("/flight/42")
+                .accept(MediaType.APPLICATION_XML))
+                .andExpect(status().isOk())
+                .andReturn().getResponse().getContentAsString();
+        Mockito.verify(flightServiceMock).get(toReturn.getId());
+        FlightEntity returned = xmlMapper.readValue(response, FlightEntity.class);
+        assertThat(returned.getName(), is(toReturn.getName()));
     }
 
 }
