@@ -99,6 +99,28 @@ public class FlightResourceControllerTest {
     }
 
     @Test
+    public void createsJson() throws Exception {
+        FlightEntity entity = FlightEntity.builder().name("Prague").build();
+        mockMvc.perform(
+                MockMvcRequestBuilders.post("/flight/")
+                        .content(jsonMapper.writeValueAsString(entity))
+                        .contentType(MediaType.APPLICATION_JSON)
+        );
+        Mockito.verify(flightServiceMock).create(entity);
+    }
+
+    @Test
+    public void createsXml() throws Exception {
+        FlightEntity entity = FlightEntity.builder().name("Prague").build();
+        mockMvc.perform(
+                MockMvcRequestBuilders.post("/flight/")
+                        .content(xmlMapper.writeValueAsString(entity))
+                        .contentType(MediaType.APPLICATION_XML)
+        );
+        Mockito.verify(flightServiceMock).create(entity);
+    }
+
+    @Test
     public void getsJson() throws Exception {
         FlightEntity toReturn = FlightEntity.builder().id(42).name("Prague").from(DestinationEntity.builder().id(44).name("Prague").build()).build();
         Mockito.when(flightServiceMock.get(toReturn.getId())).thenReturn(toReturn);

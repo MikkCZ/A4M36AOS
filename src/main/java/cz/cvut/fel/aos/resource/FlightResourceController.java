@@ -43,6 +43,16 @@ public class FlightResourceController {
         return flightService.get(id);
     }
 
+    @RequestMapping(value = "/", method = RequestMethod.POST, consumes={MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public int createNewFlight(@RequestBody FlightEntity flightEntity) {
+        return flightService.create(flightEntity);
+    }
+
+    @RequestMapping(value = "/{id}", method = RequestMethod.PUT, consumes={MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public void updateFlight(@PathVariable("id") int id, @RequestBody FlightEntity flightEntity) {
+        flightService.update(id, flightEntity);
+    }
+
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public void deleteFlight(@PathVariable("id") int id) {
         flightService.delete(id);
