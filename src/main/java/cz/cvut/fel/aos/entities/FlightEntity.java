@@ -1,5 +1,10 @@
 package cz.cvut.fel.aos.entities;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import cz.cvut.fel.aos.entities.jackson.DestinationEntityIdResolver;
 import lombok.*;
 
 import javax.persistence.*;
@@ -26,11 +31,23 @@ public class FlightEntity implements Serializable {
     @Column(name = "dateOfDeparture")
     private Instant departure;
 
+    @JsonIdentityInfo(
+            generator=ObjectIdGenerators.PropertyGenerator.class,
+            property="id",
+            resolver = DestinationEntityIdResolver.class
+    )
+    @JsonIdentityReference(alwaysAsId=true)
     @Getter
     @Setter
     @ManyToOne(cascade = CascadeType.PERSIST)
     private DestinationEntity from;
 
+    @JsonIdentityInfo(
+            generator=ObjectIdGenerators.PropertyGenerator.class,
+            property="id",
+            resolver = DestinationEntityIdResolver.class
+    )
+    @JsonIdentityReference(alwaysAsId=true)
     @Getter
     @Setter
     @ManyToOne(cascade = CascadeType.PERSIST)
@@ -56,9 +73,20 @@ public class FlightEntity implements Serializable {
     @Column(name = "name")
     private String name;
 
+    @JsonIgnore
     @Getter
     @Setter
     @OneToMany(mappedBy = "flight")
     private Set<ReservationEntity> reservations;
+
+    @Getter
+    private String url;
+
+    @PostPersist
+    @PostLoad
+    @PostUpdate
+    public void updateUrl() {
+        this.url = String.format("/destination/%d", id);
+    }
 
 }

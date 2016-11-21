@@ -6,3 +6,7 @@ db:
   pass: 'airline'
   schema: 'public'
 
+spring:
+  jackson:
+    serialization:
+      write_dates_as_timestamps: false

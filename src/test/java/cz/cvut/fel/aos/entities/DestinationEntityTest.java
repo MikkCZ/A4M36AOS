@@ -32,10 +32,12 @@ public class DestinationEntityTest extends AbstractDatabaseTest {
     public void createAndFind() throws Exception {
         DestinationEntity entity = DestinationEntity.builder().name("Prague").latitude(3.1f).longitude(4.2f).build();
         executeInTransaction(() -> destinationEntityDao.create(entity));
+        assertThat(entity.getUrl(), is("/destination/"+entity.getId()));
         executeInTransaction(() -> {
             DestinationEntity found = destinationEntityDao.findById(entity.getId());
             assertThat(found, is(entity));
             assertThat(found.getName(), is("Prague"));
+            assertThat(found.getUrl(), is("/destination/"+found.getId()));
         });
     }
 
