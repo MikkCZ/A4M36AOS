@@ -72,7 +72,11 @@ public class FlightResourceControllerTest {
     @Test
     public void getsAllFlightsWithPagination() throws Exception {
         Page<FlightEntity> toReturn = new Page(
-                ImmutableList.of(FlightEntity.builder().name("Prague").build()),
+                ImmutableList.of(
+                        FlightEntity.builder().name("OK42").from(
+                                DestinationEntity.builder().id(44).name("Prague").build()
+                        ).build())
+                ,
                 42L
         );
         QueryParams queryParams = new QueryParams().setPagination(new Pagination(1, 1));
