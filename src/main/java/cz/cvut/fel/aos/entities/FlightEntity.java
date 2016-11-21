@@ -1,15 +1,12 @@
 package cz.cvut.fel.aos.entities;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIdentityReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.*;
 import cz.cvut.fel.aos.entities.jackson.DestinationEntityIdResolver;
 import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.time.Instant;
+import java.time.ZonedDateTime;
 import java.util.Set;
 
 @Entity(name = "flight")
@@ -29,7 +26,8 @@ public class FlightEntity implements Serializable {
     @Getter
     @Setter
     @Column(name = "dateOfDeparture")
-    private Instant departure;
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSZ")
+    private ZonedDateTime dateOfDeparture;
 
     @JsonIdentityInfo(
             generator=ObjectIdGenerators.PropertyGenerator.class,

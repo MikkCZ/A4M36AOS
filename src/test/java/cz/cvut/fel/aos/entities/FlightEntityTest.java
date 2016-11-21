@@ -6,7 +6,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.time.Instant;
+import java.time.ZonedDateTime;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -26,8 +26,8 @@ public class FlightEntityTest extends AbstractDatabaseTest {
 
     @Test
     public void createAndFind() throws Exception {
-        Instant departure = Instant.now();
-        FlightEntity entity = FlightEntity.builder().name("OK42").departure(departure)
+        ZonedDateTime departure = ZonedDateTime.now();
+        FlightEntity entity = FlightEntity.builder().name("OK42").dateOfDeparture(departure)
                 .from(
                         DestinationEntity.builder().name("Prague").build())
                 .to(
@@ -38,7 +38,7 @@ public class FlightEntityTest extends AbstractDatabaseTest {
             FlightEntity found = flightEntityDao.findById(entity.getId());
             assertThat(found, is(entity));
             assertThat(found.getName(), is("OK42"));
-            assertThat(found.getDeparture(), is(departure));
+            assertThat(found.getDateOfDeparture(), is(departure));
             assertThat(found.getFrom().getName(), is("Prague"));
             assertThat(found.getTo().getName(), is("Paris"));
         });

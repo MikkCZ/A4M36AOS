@@ -30,7 +30,9 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
@@ -67,12 +69,12 @@ public class FlightResourceControllerTest {
 
     @Test
     public void getsAllFlightsWithOrder() throws Exception {
-        Mockito.when(flightServiceMock.getAll(any())).thenReturn(new Page(ImmutableList.of(), 0L));
+        Mockito.when(flightServiceMock.getAll(any(), any())).thenReturn(new Page(ImmutableList.of(), 0L));
         mockMvc.perform(
                 MockMvcRequestBuilders.get("/flight/")
                         .header("X-Order", "name:asc")
         );
-        Mockito.verify(flightServiceMock).getAll(new QueryParams().setOrderBy(new OrderBy("name", Order.ASC)));
+        Mockito.verify(flightServiceMock).getAll(new QueryParams().setOrderBy(new OrderBy("name", Order.ASC)), Optional.empty());
     }
 
     @Test
@@ -81,18 +83,18 @@ public class FlightResourceControllerTest {
                 ImmutableList.of(
                         FlightEntity.builder().name("OK42").from(
                                 DestinationEntity.builder().id(44).name("Prague").build()
-                        ).build())
+                        ).dateOfDeparture(ZonedDateTime.now()).build())
                 ,
                 42L
         );
         QueryParams queryParams = new QueryParams().setPagination(new Pagination(1, 1));
-        Mockito.when(flightServiceMock.getAll(queryParams)).thenReturn(toReturn);
+        Mockito.when(flightServiceMock.getAll(queryParams, Optional.empty())).thenReturn(toReturn);
         MockHttpServletResponse response = mockMvc.perform(
                 MockMvcRequestBuilders.get("/flight/")
                         .header("X-Base", 1)
                         .header("X-Offset", 1)
         ).andReturn().getResponse();
-        Mockito.verify(flightServiceMock).getAll(queryParams);
+        Mockito.verify(flightServiceMock).getAll(queryParams, Optional.empty());
         List<FlightEntity> returned = jsonMapper.readValue(response.getContentAsString(), List.class);
         assertThat(returned, hasSize(1));
         assertThat(Long.valueOf(response.getHeader("X-Count-records")), is(42L));

@@ -3,6 +3,7 @@ package cz.cvut.fel.aos.resource;
 import cz.cvut.fel.aos.entities.FlightEntity;
 import cz.cvut.fel.aos.resource.pages.Page;
 import cz.cvut.fel.aos.resource.params.QueryParams;
+import cz.cvut.fel.aos.resource.params.sorting.TimeRangeFilter;
 import cz.cvut.fel.aos.service.FlightService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -27,12 +28,13 @@ public class FlightResourceController {
     public ResponseEntity<List<FlightEntity>> getAllFlights(
             @RequestHeader(value = "X-Order", required = false) String xOrder,
             @RequestHeader(value = "X-Base", required = false) Integer xBase,
-            @RequestHeader(value = "X-Offset", defaultValue = "0") Integer xOffset
+            @RequestHeader(value = "X-Offset", defaultValue = "0") Integer xOffset,
+            @RequestHeader(value = "X-Filter", required = false) String xFilter
     ) {
         QueryParams queryParams = new QueryParams()
                 .setOrderBy(fromXOrder(xOrder))
                 .setPagination(fromHeaders(xBase, xOffset));
-        Page<FlightEntity> results = flightService.getAll(queryParams);
+        Page<FlightEntity> results = flightService.getAll(queryParams, TimeRangeFilter.fromXFilter(xFilter));
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add("X-Count-records", results.getCount().toString());
         return new ResponseEntity(results.getResults(), httpHeaders, HttpStatus.OK);
