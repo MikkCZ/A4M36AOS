@@ -4,7 +4,6 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Set;
 
 @Entity(name = "destination")
 @NoArgsConstructor @AllArgsConstructor @Builder
@@ -24,6 +23,9 @@ public class DestinationEntity implements Serializable {
     private String name;
 
     @Getter
+    private String url;
+
+    @Getter
     @Setter
     @Column(name = "lat")
     private float latitude;
@@ -33,14 +35,11 @@ public class DestinationEntity implements Serializable {
     @Column(name = "lon")
     private float longitude;
 
-    @Getter
-    @Setter
-    @OneToMany(mappedBy = "from")
-    private Set<FlightEntity> from;
-
-    @Getter
-    @Setter
-    @OneToMany(mappedBy = "to")
-    private Set<FlightEntity> to;
+    @PostPersist
+    @PostLoad
+    @PostUpdate
+    public void updateUrl() {
+        this.url = String.format("/destination/%d", id);
+    }
 
 }
