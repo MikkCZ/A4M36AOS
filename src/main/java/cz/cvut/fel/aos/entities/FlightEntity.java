@@ -1,5 +1,6 @@
 package cz.cvut.fel.aos.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -26,11 +27,13 @@ public class FlightEntity implements Serializable {
     @Column(name = "dateOfDeparture")
     private Instant departure;
 
+    // TODO id in (de)serialization only
     @Getter
     @Setter
     @ManyToOne(cascade = CascadeType.PERSIST)
     private DestinationEntity from;
 
+    // TODO id in (de)serialization only
     @Getter
     @Setter
     @ManyToOne(cascade = CascadeType.PERSIST)
@@ -56,9 +59,20 @@ public class FlightEntity implements Serializable {
     @Column(name = "name")
     private String name;
 
+    @JsonIgnore
     @Getter
     @Setter
     @OneToMany(mappedBy = "flight")
     private Set<ReservationEntity> reservations;
+
+    @Getter
+    private String url;
+
+    @PostPersist
+    @PostLoad
+    @PostUpdate
+    public void updateUrl() {
+        this.url = String.format("/destination/%d", id);
+    }
 
 }
