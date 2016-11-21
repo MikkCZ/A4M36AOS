@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Set;
 
 @Entity(name = "destination")
 @NoArgsConstructor @AllArgsConstructor @Builder
@@ -31,5 +32,10 @@ public class DestinationEntity implements Serializable {
     @Setter
     @Column(name = "lon")
     private float longitude;
+
+    @Getter
+    @Setter
+    @OneToMany(mappedBy = "from")
+    private Set<FlightEntity> from;
 
 }
