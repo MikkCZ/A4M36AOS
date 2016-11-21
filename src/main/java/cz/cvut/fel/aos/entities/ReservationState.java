@@ -1,5 +1,5 @@
 package cz.cvut.fel.aos.entities;
 
-public enum StateChoices {
+public enum ReservationState {
     NEW, PAID, CANCELED;
 }

@@ -38,4 +38,9 @@ public class DestinationEntity implements Serializable {
     @OneToMany(mappedBy = "from")
     private Set<FlightEntity> from;
 
+    @Getter
+    @Setter
+    @OneToMany(mappedBy = "to")
+    private Set<FlightEntity> to;
+
 }

@@ -5,6 +5,7 @@ import lombok.*;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.Set;
 
 @Entity(name = "flight")
 @NoArgsConstructor
@@ -54,5 +55,10 @@ public class FlightEntity implements Serializable {
     @Setter
     @Column(name = "name")
     private String name;
+
+    @Getter
+    @Setter
+    @OneToMany(mappedBy = "flight")
+    private Set<ReservationEntity> reservations;
 
 }
