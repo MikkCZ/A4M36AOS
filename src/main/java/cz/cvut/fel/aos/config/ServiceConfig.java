@@ -23,4 +23,9 @@ public class ServiceConfig {
         return new FlightService(flightEntityDao);
     }
 
+    @Bean
+    public ApplicationContextHolder applicationContextHolder() {
+        return ApplicationContextHolder.getInstance();
+    }
+
 }

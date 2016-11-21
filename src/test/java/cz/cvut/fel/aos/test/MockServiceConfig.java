@@ -1,5 +1,6 @@
 package cz.cvut.fel.aos.test;
 
+import cz.cvut.fel.aos.config.ApplicationContextHolder;
 import cz.cvut.fel.aos.service.DestinationService;
 import cz.cvut.fel.aos.service.FlightService;
 import org.mockito.Mockito;
@@ -17,5 +18,10 @@ public class MockServiceConfig {
     @Bean
     public FlightService flightServiceMock() {
         return Mockito.mock(FlightService.class);
+    }
+
+    @Bean
+    public ApplicationContextHolder applicationContextHolder() {
+        return ApplicationContextHolder.getInstance();
     }
 }

@@ -11,6 +11,7 @@ import cz.cvut.fel.aos.resource.params.QueryParams;
 import cz.cvut.fel.aos.resource.params.pagination.Pagination;
 import cz.cvut.fel.aos.resource.params.sorting.Order;
 import cz.cvut.fel.aos.resource.params.sorting.OrderBy;
+import cz.cvut.fel.aos.service.DestinationService;
 import cz.cvut.fel.aos.service.FlightService;
 import cz.cvut.fel.aos.test.MockServiceConfig;
 import org.junit.Before;
@@ -45,6 +46,9 @@ public class FlightResourceControllerTest {
 
     @Autowired
     private FlightService flightServiceMock;
+
+    @Autowired
+    private DestinationService destinationServiceMock;
 
     private ObjectMapper jsonMapper = new ObjectMapper();
 
@@ -89,15 +93,16 @@ public class FlightResourceControllerTest {
                         .header("X-Offset", 1)
         ).andReturn().getResponse();
         Mockito.verify(flightServiceMock).getAll(queryParams);
-        List<DestinationEntity> returned = jsonMapper.readValue(response.getContentAsString(), List.class);
+        List<FlightEntity> returned = jsonMapper.readValue(response.getContentAsString(), List.class);
         assertThat(returned, hasSize(1));
         assertThat(Long.valueOf(response.getHeader("X-Count-records")), is(42L));
     }
 
     @Test
     public void getsJson() throws Exception {
-        FlightEntity toReturn = FlightEntity.builder().id(42).name("Prague").build();
+        FlightEntity toReturn = FlightEntity.builder().id(42).name("Prague").from(DestinationEntity.builder().id(44).name("Prague").build()).build();
         Mockito.when(flightServiceMock.get(toReturn.getId())).thenReturn(toReturn);
+        Mockito.when(destinationServiceMock.get(44)).thenReturn(DestinationEntity.builder().id(44).name("Prague").build());
         String response = mockMvc.perform(MockMvcRequestBuilders.get("/flight/42")
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -105,6 +110,7 @@ public class FlightResourceControllerTest {
         Mockito.verify(flightServiceMock).get(toReturn.getId());
         FlightEntity returned = jsonMapper.readValue(response, FlightEntity.class);
         assertThat(returned.getName(), is(toReturn.getName()));
+        assertThat(returned.getFrom().getName(), is("Prague"));
     }
 
     @Test
