@@ -1,3 +1,6 @@
+server:
+  port: 8080
+
 db:
   connection: 'jdbc:hsqldb:mem:testdb-application;create=true;user=airline;password=airline'
   driver: 'org.hsqldb.jdbcDriver'
