@@ -28,14 +28,14 @@ public class ReservationEntityTest extends AbstractDatabaseTest {
     @Test
     public void createAndFind() throws Exception {
         ReservationEntity entity = ReservationEntity.builder()
-                .created(Instant.EPOCH)
+                .created(ZonedDateTime.ofInstant(Instant.ofEpochMilli(100), ZoneId.systemDefault()))
                 .flight(FlightEntity.builder().dateOfDeparture(ZonedDateTime.ofInstant(Instant.ofEpochMilli(100), ZoneId.systemDefault())).build())
                 .build();
         executeInTransaction(() -> reservationEntityDao.create(entity));
         executeInTransaction(() -> {
             ReservationEntity found = reservationEntityDao.findById(entity.getId());
             assertThat(found, is(entity));
-            assertThat(found.getCreated(), is(Instant.EPOCH));
+            assertThat(found.getCreated(), is(ZonedDateTime.ofInstant(Instant.ofEpochMilli(100), ZoneId.systemDefault())));
             assertThat(found.getFlight().getDateOfDeparture(), is(ZonedDateTime.ofInstant(Instant.ofEpochMilli(100), ZoneId.systemDefault())));
         });
     }
