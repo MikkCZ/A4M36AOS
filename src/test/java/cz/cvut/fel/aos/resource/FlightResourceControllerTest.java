@@ -11,6 +11,7 @@ import cz.cvut.fel.aos.resource.params.QueryParams;
 import cz.cvut.fel.aos.resource.params.pagination.Pagination;
 import cz.cvut.fel.aos.resource.params.sorting.Order;
 import cz.cvut.fel.aos.resource.params.sorting.OrderBy;
+import cz.cvut.fel.aos.resource.params.sorting.TimeRangeFilter;
 import cz.cvut.fel.aos.service.DestinationService;
 import cz.cvut.fel.aos.service.FlightService;
 import cz.cvut.fel.aos.test.MockServiceConfig;
@@ -30,6 +31,8 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.time.Instant;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -95,6 +98,34 @@ public class FlightResourceControllerTest {
                         .header("X-Offset", 1)
         ).andReturn().getResponse();
         Mockito.verify(flightServiceMock).getAll(queryParams, Optional.empty());
+        List<FlightEntity> returned = jsonMapper.readValue(response.getContentAsString(), List.class);
+        assertThat(returned, hasSize(1));
+        assertThat(Long.valueOf(response.getHeader("X-Count-records")), is(42L));
+    }
+
+    @Test
+    public void getsFlightsWithFilter() throws Exception {
+        Page<FlightEntity> toReturn = new Page(
+                ImmutableList.of(
+                        FlightEntity.builder().name("OK42").from(
+                                DestinationEntity.builder().id(44).name("Prague").build()
+                        ).dateOfDeparture(ZonedDateTime.now()).build())
+                ,
+                42L
+        );
+        Mockito.when(flightServiceMock.getAll(new QueryParams(), Optional.of(new TimeRangeFilter(
+                ZonedDateTime.ofInstant(Instant.ofEpochSecond(3600), ZoneId.systemDefault()),
+                ZonedDateTime.ofInstant(Instant.ofEpochSecond(7200), ZoneId.systemDefault())
+        )))).thenReturn(toReturn);
+        MockHttpServletResponse response = mockMvc.perform(
+                MockMvcRequestBuilders.get("/flight/")
+                        .header("X-Filter", "dateOfDepartureFrom="+ZonedDateTime.ofInstant(Instant.ofEpochSecond(3600), ZoneId.systemDefault()).toString()+
+                        ",dateOfDepartureTo="+ZonedDateTime.ofInstant(Instant.ofEpochSecond(7200), ZoneId.systemDefault()).toString())
+        ).andReturn().getResponse();
+        Mockito.verify(flightServiceMock).getAll(new QueryParams(), Optional.of(new TimeRangeFilter(
+                ZonedDateTime.ofInstant(Instant.ofEpochSecond(3600), ZoneId.systemDefault()),
+                ZonedDateTime.ofInstant(Instant.ofEpochSecond(7200), ZoneId.systemDefault())
+        )));
         List<FlightEntity> returned = jsonMapper.readValue(response.getContentAsString(), List.class);
         assertThat(returned, hasSize(1));
         assertThat(Long.valueOf(response.getHeader("X-Count-records")), is(42L));

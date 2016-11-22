@@ -1,8 +1,8 @@
 package cz.cvut.fel.aos.config;
 
+import cz.cvut.fel.aos.dao.FlightEntityDao;
 import cz.cvut.fel.aos.dao.GenericEntityDao;
 import cz.cvut.fel.aos.entities.DestinationEntity;
-import cz.cvut.fel.aos.entities.FlightEntity;
 import cz.cvut.fel.aos.entities.ReservationEntity;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,8 +18,8 @@ public class DataConfig {
     }
 
     @Bean
-    public GenericEntityDao<FlightEntity> flightEntityDao() {
-        return new GenericEntityDao(FlightEntity.class);
+    public FlightEntityDao flightEntityDao() {
+        return new FlightEntityDao();
     }
 
     @Bean

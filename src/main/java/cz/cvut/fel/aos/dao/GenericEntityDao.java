@@ -77,7 +77,7 @@ public class GenericEntityDao<ENTITY extends Serializable> {
         return em.createQuery(q).getSingleResult();
     }
 
-    private Order getOrder(Path<ENTITY> path, CriteriaBuilder cb, OrderBy orderBy) {
+    protected Order getOrder(Path<ENTITY> path, CriteriaBuilder cb, OrderBy orderBy) {
         Path<Object> fieldPath = path.get(orderBy.getField());
         switch (orderBy.getOrder()) {
             case ASC:
@@ -89,7 +89,7 @@ public class GenericEntityDao<ENTITY extends Serializable> {
         }
     }
 
-    private TypedQuery<ENTITY> pagination(TypedQuery<ENTITY> typedQuery, Pagination pagination) {
+    protected TypedQuery<ENTITY> pagination(TypedQuery<ENTITY> typedQuery, Pagination pagination) {
         return typedQuery.setFirstResult(pagination.getOffset()).setMaxResults(pagination.getBase());
     }
 

@@ -1,6 +1,6 @@
 package cz.cvut.fel.aos.service;
 
-import cz.cvut.fel.aos.dao.GenericEntityDao;
+import cz.cvut.fel.aos.dao.FlightEntityDao;
 import cz.cvut.fel.aos.entities.FlightEntity;
 import cz.cvut.fel.aos.resource.pages.Page;
 import cz.cvut.fel.aos.resource.params.QueryParams;
@@ -12,12 +12,19 @@ import java.util.Optional;
 @Transactional
 public class FlightService extends GenericService<FlightEntity> {
 
-    public FlightService(GenericEntityDao<FlightEntity> entityDao) {
+    private FlightEntityDao entityDao;
+
+    public FlightService(FlightEntityDao entityDao) {
         super(entityDao);
+        this.entityDao = entityDao;
     }
 
     public Page<FlightEntity> getAll(QueryParams queryParams, Optional<TimeRangeFilter> departureFilter) {
-        return new Page(entityDao.getAll(queryParams), entityDao.getAllCount());
+        if (departureFilter.isPresent()) {
+            return new Page<>(entityDao.getFiltered(queryParams, departureFilter.get()), entityDao.getCountFiltered(departureFilter.get()));
+        } else {
+            return new Page<>(entityDao.getAll(queryParams), entityDao.getAllCount());
+        }
     }
 
     public int create(FlightEntity flightEntity) {

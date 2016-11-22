@@ -1,8 +1,8 @@
 package cz.cvut.fel.aos.config;
 
+import cz.cvut.fel.aos.dao.FlightEntityDao;
 import cz.cvut.fel.aos.dao.GenericEntityDao;
 import cz.cvut.fel.aos.entities.DestinationEntity;
-import cz.cvut.fel.aos.entities.FlightEntity;
 import cz.cvut.fel.aos.service.DestinationService;
 import cz.cvut.fel.aos.service.FlightService;
 import org.springframework.context.annotation.Bean;
@@ -19,7 +19,7 @@ public class ServiceConfig {
     }
 
     @Bean
-    public FlightService flightService(GenericEntityDao<FlightEntity> flightEntityDao) {
+    public FlightService flightService(FlightEntityDao flightEntityDao) {
         return new FlightService(flightEntityDao);
     }
 
