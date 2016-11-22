@@ -11,6 +11,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.ZonedDateTime;
+import java.util.UUID;
 
 @Entity(name = "reservation")
 @NoArgsConstructor
@@ -32,7 +33,6 @@ public class ReservationEntity implements Serializable {
     private int seats;
 
     @Getter
-    @Setter
     @Column(name = "password")
     @Size(max = 255)
     private String password;
@@ -41,7 +41,7 @@ public class ReservationEntity implements Serializable {
     @Setter
     @Column(name = "created")
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSZ")
-    private ZonedDateTime created;
+    private ZonedDateTime created = ZonedDateTime.now();
 
     @JsonIdentityInfo(
             generator=ObjectIdGenerators.PropertyGenerator.class,
@@ -59,5 +59,23 @@ public class ReservationEntity implements Serializable {
     @Column(name = "state")
     @Enumerated(EnumType.STRING)
     private ReservationState state;
+
+    @Getter
+    private String url;
+
+    @PostPersist
+    @PostLoad
+    @PostUpdate
+    public void updateUrl() {
+        this.url = String.format("/reservation/%d", id);
+    }
+
+    @PrePersist
+    @PreUpdate
+    public void setPassword() {
+        if (this.password == null) {
+            this.password = UUID.randomUUID().toString();
+        }
+    }
 
 }
