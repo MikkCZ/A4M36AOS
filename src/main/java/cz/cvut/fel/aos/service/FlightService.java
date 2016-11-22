@@ -41,6 +41,6 @@ public class FlightService extends GenericService<FlightEntity> {
         original.setPrice(flightEntity.getPrice());
         original.setSeats(flightEntity.getSeats());
         original.setName(flightEntity.getName());
-        entityDao.update(flightEntity);
+        entityDao.update(original);
     }
 }
