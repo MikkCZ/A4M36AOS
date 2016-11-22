@@ -45,8 +45,9 @@ public class ReservationResourceController {
     }
 
     @RequestMapping(value = "/", method = RequestMethod.POST, consumes={MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public int createNewReservation(@RequestBody ReservationEntity reservationEntity) {
-        return reservationService.create(reservationEntity);
+    public ReservationEntity createNewReservation(@RequestBody ReservationEntity reservationEntity) {
+        reservationService.create(reservationEntity);
+        return reservationEntity;
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT, consumes={MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})

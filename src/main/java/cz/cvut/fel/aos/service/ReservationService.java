@@ -16,14 +16,13 @@ public class ReservationService extends GenericService<ReservationEntity> {
         super(entityDao);
     }
 
-    public int create(ReservationEntity reservationEntity) {
+    public void create(ReservationEntity reservationEntity) {
         int reservedSeats = reservationEntity.getFlight().getReservations().stream().mapToInt(r -> r.getSeats()).sum();
         int seatsAvailable = reservationEntity.getFlight().getSeats() - reservedSeats;
         if (seatsAvailable < reservationEntity.getSeats()) {
             throw new InvalidReservationOperationException();
         }
         entityDao.create(reservationEntity);
-        return reservationEntity.getId();
     }
 
     public void update(int id, ReservationEntity reservationEntity) {
