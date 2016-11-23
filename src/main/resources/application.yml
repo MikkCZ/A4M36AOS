@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 8000
 
 db:
   connection: 'jdbc:hsqldb:mem:testdb-application;create=true;user=airline;password=airline'
@@ -13,3 +13,6 @@ spring:
   jackson:
     serialization:
       write_dates_as_timestamps: false
+  view:
+    prefix: '/templates/'
+    suffix: '.jsp'
