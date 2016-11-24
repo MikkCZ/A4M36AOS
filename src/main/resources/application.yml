@@ -13,6 +13,7 @@ spring:
   jackson:
     serialization:
       write_dates_as_timestamps: false
-  view:
-    prefix: '/templates/'
-    suffix: '.jsp'
+  mvc:
+    view:
+      prefix: '/WEB-INF/jsp/'
+      suffix: '.jsp'
