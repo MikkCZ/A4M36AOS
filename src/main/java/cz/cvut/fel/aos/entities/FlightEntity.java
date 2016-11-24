@@ -84,7 +84,7 @@ public class FlightEntity implements Serializable {
     @PostLoad
     @PostUpdate
     public void updateUrl() {
-        this.url = String.format("/destination/%d", id);
+        this.url = String.format("/flight/%d", id);
     }
 
 }
