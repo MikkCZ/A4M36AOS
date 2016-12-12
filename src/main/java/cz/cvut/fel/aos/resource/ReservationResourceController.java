@@ -40,8 +40,11 @@ public class ReservationResourceController {
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces={MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public ReservationEntity getReservation(@PathVariable("id") int id) {
-        return reservationService.get(id);
+    public ReservationEntity getReservation(
+            @PathVariable("id") int id,
+            @RequestHeader(value = "X-Password") String xPassword
+    ) {
+        return reservationService.getWithPassword(id, xPassword);
     }
 
     @RequestMapping(value = "/", method = RequestMethod.POST, consumes={MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
@@ -51,8 +54,12 @@ public class ReservationResourceController {
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT, consumes={MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public void updateReservation(@PathVariable("id") int id, @RequestBody ReservationEntity reservationEntity) {
-        reservationService.update(id, reservationEntity);
+    public void updateReservation(
+            @PathVariable("id") int id,
+            @RequestBody ReservationEntity reservationEntity,
+            @RequestHeader(value = "X-Password") String xPassword
+    ) {
+        reservationService.updateWithPassword(id, reservationEntity, xPassword);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
@@ -68,7 +75,7 @@ public class ReservationResourceController {
 
     @ExceptionHandler(value = InvalidReservationOperationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    private void InvalidReservationOperation(InvalidReservationOperationException e) {
+    private void invalidReservationOperation(InvalidReservationOperationException e) {
         // noop
     }
 }

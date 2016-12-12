@@ -52,18 +52,33 @@ public class ReservationServiceTest extends AbstractDatabaseTest {
         );
     }
 
-    @Test
-    public void updatesToCancelledStateOnly() {
+    @Test(expected = InvalidReservationOperationException.class)
+    public void updateFailsFroWrongPassword() {
         // Arrange
-        ReservationEntity entity = ReservationEntity.builder().build();
+        String password = "12345";
+        ReservationEntity entity = ReservationEntity.builder().password(password).build();
         executeInTransaction(() -> reservationEntityDao.create(entity));
         ReservationService reservationService = new ReservationService(reservationEntityDao);
 
         // Act + Assert
         executeInTransaction(() -> {
-            reservationService.update(entity.getId(), ReservationEntity.builder().state(ReservationState.NEW).build());
+            reservationService.updateWithPassword(entity.getId(), ReservationEntity.builder().state(ReservationState.NEW).build(), "wrong"+password);
+        });
+    }
+
+    @Test
+    public void updatesToCancelledStateOnly() {
+        // Arrange
+        String password = "12345";
+        ReservationEntity entity = ReservationEntity.builder().password(password).build();
+        executeInTransaction(() -> reservationEntityDao.create(entity));
+        ReservationService reservationService = new ReservationService(reservationEntityDao);
+
+        // Act + Assert
+        executeInTransaction(() -> {
+            reservationService.updateWithPassword(entity.getId(), ReservationEntity.builder().state(ReservationState.NEW).build(), password);
             assertThat(reservationEntityDao.findById(entity.getId()).getState(), is(not(ReservationState.NEW)));
-            reservationService.update(entity.getId(), ReservationEntity.builder().state(ReservationState.CANCELED).build());
+            reservationService.updateWithPassword(entity.getId(), ReservationEntity.builder().state(ReservationState.CANCELED).build(), password);
             assertThat(reservationEntityDao.findById(entity.getId()).getState(), is(ReservationState.CANCELED));
         });
     }
