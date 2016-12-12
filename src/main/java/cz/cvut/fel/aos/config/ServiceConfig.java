@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 @Configuration
-@Import({DataConfig.class})
+@Import({DataConfig.class, SecurityConfig.class})
 public class ServiceConfig {
 
     @Bean
