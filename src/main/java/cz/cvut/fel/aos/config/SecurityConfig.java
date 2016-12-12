@@ -29,11 +29,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.PUT, "/flight/**").hasRole("ADMIN").and().httpBasic();
         http.authorizeRequests()
                 .antMatchers(HttpMethod.DELETE, "/flight/**").hasRole("ADMIN").and().httpBasic();
+
+        http.authorizeRequests()
+                .antMatchers(HttpMethod.GET, "/reservation/").hasAnyRole("ADMIN", "MANAGER").and().httpBasic();
+        http.authorizeRequests()
+                .antMatchers(HttpMethod.DELETE, "/reservation/**").hasAnyRole("ADMIN", "MANAGER").and().httpBasic();
     }
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth.inMemoryAuthentication().withUser("user").password("user").roles("USER"); // add user
+        auth.inMemoryAuthentication().withUser("manager").password("manager").roles("MANAGER"); // add manager
         auth.inMemoryAuthentication().withUser("admin").password("admin").roles("ADMIN"); // add admin
     }
 
