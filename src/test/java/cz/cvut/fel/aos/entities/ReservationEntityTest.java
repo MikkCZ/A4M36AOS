@@ -1,6 +1,5 @@
 package cz.cvut.fel.aos.entities;
 
-import cz.cvut.fel.aos.test.AbstractDatabaseTest;
 import org.junit.Test;
 
 import java.time.Instant;

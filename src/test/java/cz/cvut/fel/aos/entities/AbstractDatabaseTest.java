@@ -1,11 +1,9 @@
-package cz.cvut.fel.aos.test;
+package cz.cvut.fel.aos.entities;
 
 import cz.cvut.fel.aos.config.DataConfig;
 import cz.cvut.fel.aos.dao.FlightEntityDao;
 import cz.cvut.fel.aos.dao.GenericEntityDao;
-import cz.cvut.fel.aos.entities.DestinationEntity;
-import cz.cvut.fel.aos.entities.FlightEntity;
-import cz.cvut.fel.aos.entities.ReservationEntity;
+import cz.cvut.fel.aos.test.TestConfig;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

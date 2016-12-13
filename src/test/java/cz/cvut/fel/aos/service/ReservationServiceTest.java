@@ -1,20 +1,22 @@
 package cz.cvut.fel.aos.service;
 
+import cz.cvut.fel.aos.config.ServiceConfig;
 import cz.cvut.fel.aos.entities.FlightEntity;
 import cz.cvut.fel.aos.entities.ReservationEntity;
 import cz.cvut.fel.aos.entities.ReservationState;
 import cz.cvut.fel.aos.exceptions.InvalidReservationOperationException;
 import cz.cvut.fel.aos.resource.pages.Page;
 import cz.cvut.fel.aos.resource.params.QueryParams;
-import cz.cvut.fel.aos.test.AbstractDatabaseTest;
 import org.junit.Test;
+import org.springframework.test.context.ContextConfiguration;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNot.not;
 
-public class ReservationServiceTest extends AbstractDatabaseTest {
+@ContextConfiguration(classes = {ServiceConfig.class})
+public class ReservationServiceTest extends AbstractServiceTest {
 
     @Test(expected = InvalidReservationOperationException.class)
     public void doesNotCreateReservationOverTheFlightCapacity() {
@@ -23,7 +25,6 @@ public class ReservationServiceTest extends AbstractDatabaseTest {
                 .seats(12)
                 .build();
         createEntities(flight);
-        ReservationService reservationService = new ReservationService(reservationEntityDao);
         executeInTransaction(() -> {
             reservationService.create(ReservationEntity.builder().flight(flightEntityDao.findById(flight.getId())).seats(10).build());
             reservationService.create(ReservationEntity.builder().flight(flightEntityDao.findById(flight.getId())).seats(1).build());
@@ -41,12 +42,11 @@ public class ReservationServiceTest extends AbstractDatabaseTest {
         String password = "12345";
         ReservationEntity entity = ReservationEntity.builder().password(password).build();
         createEntities(entity);
-        ReservationService reservationService = new ReservationService(reservationEntityDao);
 
         // Act + Assert
-        executeInTransaction(() -> {
-            reservationService.updateWithPassword(entity.getId(), ReservationEntity.builder().state(ReservationState.NEW).build(), "wrong"+password);
-        });
+        executeInTransaction(() ->
+            reservationService.updateWithPassword(entity.getId(), ReservationEntity.builder().state(ReservationState.NEW).build(), "wrong"+password)
+        );
     }
 
     @Test
@@ -55,7 +55,6 @@ public class ReservationServiceTest extends AbstractDatabaseTest {
         String password = "12345";
         ReservationEntity entity = ReservationEntity.builder().password(password).build();
         createEntities(entity);
-        ReservationService reservationService = new ReservationService(reservationEntityDao);
 
         // Act + Assert
         executeInTransaction(() -> {
@@ -69,7 +68,6 @@ public class ReservationServiceTest extends AbstractDatabaseTest {
     @Test
     public void deletesInNewState() {
         // Arrange
-        ReservationService reservationService = new ReservationService(reservationEntityDao);
         ReservationEntity entityNew = ReservationEntity.builder().state(ReservationState.NEW).build();
         executeInTransaction(() -> {
             reservationEntityDao.create(entityNew);

@@ -1,23 +1,15 @@
 package cz.cvut.fel.aos.service;
 
-import cz.cvut.fel.aos.config.ServiceConfig;
 import cz.cvut.fel.aos.entities.DestinationEntity;
 import cz.cvut.fel.aos.resource.params.QueryParams;
-import cz.cvut.fel.aos.test.AbstractDatabaseTest;
 import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
 
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
-@ContextConfiguration(classes = {ServiceConfig.class})
-public class DestinationServiceTest extends AbstractDatabaseTest {
-
-    @Autowired
-    private DestinationService destinationService;
+public class DestinationServiceTest extends AbstractServiceTest {
 
     @Test
     public void getsAll() {

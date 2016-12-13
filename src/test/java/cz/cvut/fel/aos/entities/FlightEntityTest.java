@@ -2,7 +2,6 @@ package cz.cvut.fel.aos.entities;
 
 import cz.cvut.fel.aos.resource.params.QueryParams;
 import cz.cvut.fel.aos.resource.params.sorting.TimeRangeFilter;
-import cz.cvut.fel.aos.test.AbstractDatabaseTest;
 import org.junit.Test;
 
 import java.time.ZonedDateTime;

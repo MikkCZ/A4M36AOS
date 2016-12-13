@@ -4,7 +4,6 @@ import cz.cvut.fel.aos.resource.params.QueryParams;
 import cz.cvut.fel.aos.resource.params.pagination.Pagination;
 import cz.cvut.fel.aos.resource.params.sorting.Order;
 import cz.cvut.fel.aos.resource.params.sorting.OrderBy;
-import cz.cvut.fel.aos.test.AbstractDatabaseTest;
 import org.junit.Test;
 
 import java.util.List;
