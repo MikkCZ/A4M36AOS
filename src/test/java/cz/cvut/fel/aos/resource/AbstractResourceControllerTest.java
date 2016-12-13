@@ -19,7 +19,7 @@ import org.springframework.web.context.WebApplicationContext;
 @WebAppConfiguration
 @DirtiesContext
 @ContextConfiguration(classes = {RestConfig.class, MockServiceConfig.class})
-public class AbstractResourceControllerTest {
+public abstract class AbstractResourceControllerTest {
 
     @Autowired
     protected WebApplicationContext webApplicationContext;
