@@ -12,4 +12,9 @@ public class EntryController {
     public String singleEntryPoint() {
         return "index";
     }
+
+    @RequestMapping(value = "/help", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
+    public String helpPoint() {
+        return "help";
+    }
 }
