@@ -26,9 +26,9 @@ public class DestinationServiceTest extends AbstractDatabaseTest {
 
     @Before
     public void setUp() {
-        executeInTransaction(() -> {
-            destinationEntityDao.getAll().stream().forEach(destinationEntityDao::delete);
-        });
+        executeInTransaction(() ->
+            destinationEntityDao.getAll().forEach(destinationEntityDao::delete)
+        );
     }
 
     @Test

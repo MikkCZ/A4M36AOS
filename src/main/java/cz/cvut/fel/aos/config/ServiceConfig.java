@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 @Configuration
-@Import({DataConfig.class, SecurityConfig.class, GoogleMapsClientConfig.class})
+@Import({DataConfig.class, SecurityConfig.class})
 public class ServiceConfig {
 
     @Bean
@@ -29,6 +29,11 @@ public class ServiceConfig {
     @Bean
     public ReservationService reservationService(GenericEntityDao<ReservationEntity> reservationEntityDao) {
         return new ReservationService(reservationEntityDao);
+    }
+
+    @Bean
+    public GeoApiContext geoApiContext() {
+        return new GeoApiContext().setApiKey("AIzaSyBQiMZewbukKwq5O6bylOfAixQwrtPfqNY");
     }
 
     @Bean

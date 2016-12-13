@@ -6,10 +6,11 @@ import com.google.maps.model.GeocodingResult;
 import com.google.maps.model.LatLng;
 import cz.cvut.fel.aos.dao.GenericEntityDao;
 import cz.cvut.fel.aos.entities.DestinationEntity;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
-
+@Slf4j
 public class DestinationService extends GenericService<DestinationEntity> {
 
     private final GeoApiContext geoApiContext;
@@ -32,17 +33,14 @@ public class DestinationService extends GenericService<DestinationEntity> {
 
     private void enhanceByGeoApi(DestinationEntity destinationEntity) {
         try {
-            GeocodingResult[] results = GeocodingApi.geocode(
-                    geoApiContext,
-                    destinationEntity.getName())
-                    .await();
+            GeocodingResult[] results = GeocodingApi.geocode(geoApiContext, destinationEntity.getName()).await();
             if (results.length > 0) {
                 LatLng location = results[0].geometry.location;
                 destinationEntity.setLatitude((float)location.lat);
                 destinationEntity.setLongitude((float)location.lng);
             }
         } catch (Exception e) {
-            System.err.println(e);
+            log.error("Could nor t retrieve info from Google API.", e);
         }
     }
 }
