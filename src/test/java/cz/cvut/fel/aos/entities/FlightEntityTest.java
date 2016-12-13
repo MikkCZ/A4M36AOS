@@ -1,12 +1,9 @@
 package cz.cvut.fel.aos.entities;
 
-import cz.cvut.fel.aos.dao.FlightEntityDao;
 import cz.cvut.fel.aos.resource.params.QueryParams;
 import cz.cvut.fel.aos.resource.params.sorting.TimeRangeFilter;
 import cz.cvut.fel.aos.test.AbstractDatabaseTest;
-import org.junit.Before;
 import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
@@ -17,18 +14,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.hasSize;
 
-
 public class FlightEntityTest extends AbstractDatabaseTest {
-
-    @Autowired
-    private FlightEntityDao flightEntityDao;
-
-    @Before
-    public void setUp() {
-        executeInTransaction(() -> {
-            flightEntityDao.getAll().stream().forEach(flightEntityDao::delete);
-        });
-    }
 
     @Test
     public void createAndFind() throws Exception {
@@ -39,7 +25,7 @@ public class FlightEntityTest extends AbstractDatabaseTest {
                 .to(
                         DestinationEntity.builder().name("Paris").build())
                 .build();
-        executeInTransaction(() -> flightEntityDao.create(entity));
+        createEntities(entity);
         executeInTransaction(() -> {
             FlightEntity found = flightEntityDao.findById(entity.getId());
             assertThat(found, is(entity));
@@ -56,12 +42,7 @@ public class FlightEntityTest extends AbstractDatabaseTest {
         FlightEntity e2 = FlightEntity.builder().name("Brno").dateOfDeparture(ZonedDateTime.now().plus(1, ChronoUnit.DAYS)).build();
         FlightEntity e3 = FlightEntity.builder().name("Berlin").dateOfDeparture(ZonedDateTime.now().minus(1, ChronoUnit.DAYS)).build();
         FlightEntity e4 = FlightEntity.builder().name("London").build();
-        executeInTransaction(() -> {
-            flightEntityDao.create(e1);
-            flightEntityDao.create(e2);
-            flightEntityDao.create(e3);
-            flightEntityDao.create(e4);
-        });
+        createEntities(e1, e2, e3, e4);
         executeInTransaction(() -> {
             TimeRangeFilter filter = new TimeRangeFilter(
                     ZonedDateTime.now().minus(1, ChronoUnit.HOURS),

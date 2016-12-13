@@ -1,7 +1,5 @@
 package cz.cvut.fel.aos.service;
 
-import cz.cvut.fel.aos.dao.FlightEntityDao;
-import cz.cvut.fel.aos.dao.GenericEntityDao;
 import cz.cvut.fel.aos.entities.FlightEntity;
 import cz.cvut.fel.aos.entities.ReservationEntity;
 import cz.cvut.fel.aos.entities.ReservationState;
@@ -9,9 +7,7 @@ import cz.cvut.fel.aos.exceptions.InvalidReservationOperationException;
 import cz.cvut.fel.aos.resource.pages.Page;
 import cz.cvut.fel.aos.resource.params.QueryParams;
 import cz.cvut.fel.aos.test.AbstractDatabaseTest;
-import org.junit.Before;
 import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
@@ -20,26 +16,13 @@ import static org.hamcrest.core.IsNot.not;
 
 public class ReservationServiceTest extends AbstractDatabaseTest {
 
-    @Autowired
-    private FlightEntityDao flightEntityDao;
-
-    @Autowired
-    private GenericEntityDao<ReservationEntity> reservationEntityDao;
-
-    @Before
-    public void setUp() {
-        executeInTransaction(() -> {
-            reservationEntityDao.getAll().stream().forEach(reservationEntityDao::delete);
-        });
-    }
-
     @Test(expected = InvalidReservationOperationException.class)
     public void doesNotCreateReservationOverTheFlightCapacity() {
         // Arrange
         FlightEntity flight = FlightEntity.builder()
                 .seats(12)
                 .build();
-        executeInTransaction(() -> flightEntityDao.create(flight));
+        createEntities(flight);
         ReservationService reservationService = new ReservationService(reservationEntityDao);
         executeInTransaction(() -> {
             reservationService.create(ReservationEntity.builder().flight(flightEntityDao.findById(flight.getId())).seats(10).build());
@@ -57,7 +40,7 @@ public class ReservationServiceTest extends AbstractDatabaseTest {
         // Arrange
         String password = "12345";
         ReservationEntity entity = ReservationEntity.builder().password(password).build();
-        executeInTransaction(() -> reservationEntityDao.create(entity));
+        createEntities(entity);
         ReservationService reservationService = new ReservationService(reservationEntityDao);
 
         // Act + Assert
@@ -71,7 +54,7 @@ public class ReservationServiceTest extends AbstractDatabaseTest {
         // Arrange
         String password = "12345";
         ReservationEntity entity = ReservationEntity.builder().password(password).build();
-        executeInTransaction(() -> reservationEntityDao.create(entity));
+        createEntities(entity);
         ReservationService reservationService = new ReservationService(reservationEntityDao);
 
         // Act + Assert

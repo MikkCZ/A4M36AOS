@@ -1,11 +1,9 @@
 package cz.cvut.fel.aos.service;
 
 import cz.cvut.fel.aos.config.ServiceConfig;
-import cz.cvut.fel.aos.dao.GenericEntityDao;
 import cz.cvut.fel.aos.entities.DestinationEntity;
 import cz.cvut.fel.aos.resource.params.QueryParams;
 import cz.cvut.fel.aos.test.AbstractDatabaseTest;
-import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -19,26 +17,16 @@ import static org.hamcrest.Matchers.*;
 public class DestinationServiceTest extends AbstractDatabaseTest {
 
     @Autowired
-    private GenericEntityDao<DestinationEntity> destinationEntityDao;
-
-    @Autowired
     private DestinationService destinationService;
-
-    @Before
-    public void setUp() {
-        executeInTransaction(() ->
-            destinationEntityDao.getAll().forEach(destinationEntityDao::delete)
-        );
-    }
 
     @Test
     public void getsAll() {
-        executeInTransaction(() -> {
-            destinationEntityDao.create(DestinationEntity.builder().name("Prague").build());
-            destinationEntityDao.create(DestinationEntity.builder().name("Brno").build());
-            destinationEntityDao.create(DestinationEntity.builder().name("Berlin").build());
-            destinationEntityDao.create(DestinationEntity.builder().name("London").build());
-        });
+        createEntities(
+                DestinationEntity.builder().name("Prague").build(),
+                DestinationEntity.builder().name("Brno").build(),
+                DestinationEntity.builder().name("Berlin").build(),
+                DestinationEntity.builder().name("London").build()
+        );
         List<DestinationEntity> loaded = destinationService.getAll(new QueryParams()).getResults();
         assertThat(loaded, hasSize(4));
     }

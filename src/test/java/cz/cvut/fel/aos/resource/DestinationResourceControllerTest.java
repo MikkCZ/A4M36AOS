@@ -62,7 +62,7 @@ public class DestinationResourceControllerTest {
 
     @Test
     public void getsAllDestinationsWithOrder() throws Exception {
-        Mockito.when(destinationServiceMock.getAll(any())).thenReturn(new Page(ImmutableList.of(), 0L));
+        Mockito.when(destinationServiceMock.getAll(any())).thenReturn(new Page<>(ImmutableList.of(), 0L));
         mockMvc.perform(
                 MockMvcRequestBuilders.get("/destination/")
                         .header("X-Order", "name:asc")
@@ -72,7 +72,7 @@ public class DestinationResourceControllerTest {
 
     @Test
     public void getsAllDestinationsWithPagination() throws Exception {
-        Page<DestinationEntity> toReturn = new Page(
+        Page<DestinationEntity> toReturn = new Page<>(
                 ImmutableList.of(DestinationEntity.builder().name("Prague").build()),
                 42L
         );

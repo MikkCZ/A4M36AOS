@@ -72,7 +72,7 @@ public class FlightResourceControllerTest {
 
     @Test
     public void getsAllFlightsWithOrder() throws Exception {
-        Mockito.when(flightServiceMock.getAll(any(), any())).thenReturn(new Page(ImmutableList.of(), 0L));
+        Mockito.when(flightServiceMock.getAll(any(), any())).thenReturn(new Page<>(ImmutableList.of(), 0L));
         mockMvc.perform(
                 MockMvcRequestBuilders.get("/flight/")
                         .header("X-Order", "name:asc")
@@ -82,7 +82,7 @@ public class FlightResourceControllerTest {
 
     @Test
     public void getsAllFlightsWithPagination() throws Exception {
-        Page<FlightEntity> toReturn = new Page(
+        Page<FlightEntity> toReturn = new Page<>(
                 ImmutableList.of(
                         FlightEntity.builder().name("OK42").from(
                                 DestinationEntity.builder().id(44).name("Prague").build()
@@ -105,7 +105,7 @@ public class FlightResourceControllerTest {
 
     @Test
     public void getsFlightsWithFilter() throws Exception {
-        Page<FlightEntity> toReturn = new Page(
+        Page<FlightEntity> toReturn = new Page<>(
                 ImmutableList.of(
                         FlightEntity.builder().name("OK42").from(
                                 DestinationEntity.builder().id(44).name("Prague").build()
