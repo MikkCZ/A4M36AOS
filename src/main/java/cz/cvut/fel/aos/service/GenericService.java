@@ -15,7 +15,7 @@ public abstract class GenericService<ENTITY extends Serializable> {
     protected final GenericEntityDao<ENTITY> entityDao;
 
     public Page<ENTITY> getAll(QueryParams queryParams) {
-        return new Page(entityDao.getAll(queryParams), entityDao.getAllCount());
+        return new Page<>(entityDao.getAll(queryParams), entityDao.getAllCount());
     }
 
     public ENTITY get(int id) {

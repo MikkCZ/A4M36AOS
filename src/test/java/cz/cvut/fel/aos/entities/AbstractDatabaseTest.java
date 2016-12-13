@@ -1,6 +1,10 @@
-package cz.cvut.fel.aos.test;
+package cz.cvut.fel.aos.entities;
 
 import cz.cvut.fel.aos.config.DataConfig;
+import cz.cvut.fel.aos.dao.FlightEntityDao;
+import cz.cvut.fel.aos.dao.GenericEntityDao;
+import cz.cvut.fel.aos.test.TestConfig;
+import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.ConfigFileApplicationContextInitializer;
@@ -16,6 +20,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
 
+import java.util.Arrays;
+
 @RunWith(SpringJUnit4ClassRunner.class)
 @DirtiesContext
 @ContextConfiguration(
@@ -26,6 +32,15 @@ import org.springframework.transaction.support.TransactionTemplate;
 @Rollback
 @ActiveProfiles("dev")
 public abstract class AbstractDatabaseTest {
+
+    @Autowired
+    protected GenericEntityDao<ReservationEntity> reservationEntityDao;
+
+    @Autowired
+    protected GenericEntityDao<DestinationEntity> destinationEntityDao;
+
+    @Autowired
+    protected FlightEntityDao flightEntityDao;
 
     @Autowired
     private PlatformTransactionManager transactionManager;
@@ -42,5 +57,38 @@ public abstract class AbstractDatabaseTest {
                 r.run();
             }
         });
+    }
+
+    @Before
+    public void clearDatabase() {
+        executeInTransaction(() -> {
+            reservationEntityDao.getAll().forEach(reservationEntityDao::delete);
+            destinationEntityDao.getAll().forEach(destinationEntityDao::delete);
+            flightEntityDao.getAll().forEach(flightEntityDao::delete);
+        });
+    }
+
+    protected void createEntities(DestinationEntity... entities) {
+        executeInTransaction(() ->
+                Arrays.stream(entities).forEach(entity ->
+                        destinationEntityDao.create(entity)
+                )
+        );
+    }
+
+    protected void createEntities(ReservationEntity... entities) {
+        executeInTransaction(() ->
+                Arrays.stream(entities).forEach(entity ->
+                        reservationEntityDao.create(entity)
+                )
+        );
+    }
+
+    protected void createEntities(FlightEntity... entities) {
+        executeInTransaction(() ->
+                Arrays.stream(entities).forEach(entity ->
+                        flightEntityDao.create(entity)
+                )
+        );
     }
 }

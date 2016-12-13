@@ -16,8 +16,14 @@ public class ReservationService extends GenericService<ReservationEntity> {
         super(entityDao);
     }
 
+    public ReservationEntity getWithPassword(int id, String password) {
+        ReservationEntity e = this.get(id);
+        checkPassword(e, password);
+        return e;
+    }
+
     public void create(ReservationEntity reservationEntity) {
-        int reservedSeats = reservationEntity.getFlight().getReservations().stream().mapToInt(r -> r.getSeats()).sum();
+        int reservedSeats = reservationEntity.getFlight().getReservations().stream().mapToInt(ReservationEntity::getSeats).sum();
         int seatsAvailable = reservationEntity.getFlight().getSeats() - reservedSeats;
         if (seatsAvailable < reservationEntity.getSeats()) {
             throw new InvalidReservationOperationException();
@@ -25,8 +31,9 @@ public class ReservationService extends GenericService<ReservationEntity> {
         entityDao.create(reservationEntity);
     }
 
-    public void update(int id, ReservationEntity reservationEntity) {
+    public void updateWithPassword(int id, ReservationEntity reservationEntity, String password) {
         ReservationEntity original = get(id);
+        checkPassword(original, password);
         if (reservationEntity.getState() == CANCELED) {
             original.setState(CANCELED);
         }
@@ -45,6 +52,12 @@ public class ReservationService extends GenericService<ReservationEntity> {
         if (entity.getState() == NEW) {
             super.delete(id);
         } else {
+            throw new InvalidReservationOperationException();
+        }
+    }
+
+    private void checkPassword(ReservationEntity e, String password) {
+        if (!e.getPassword().equals(password)) {
             throw new InvalidReservationOperationException();
         }
     }

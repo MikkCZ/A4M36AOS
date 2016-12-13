@@ -17,9 +17,6 @@ import org.springframework.web.servlet.DispatcherServlet;
 @Import({EmbeddedServletContainerAutoConfiguration.class, ServiceConfig.class})
 public class AirlineServiceInit {
 
-    /**
-     * For development, run with --spring.profiles.active=dev
-     */
     public static void main(String[] args) throws Exception {
         SpringApplication.run(AirlineServiceInit.class, args);
     }

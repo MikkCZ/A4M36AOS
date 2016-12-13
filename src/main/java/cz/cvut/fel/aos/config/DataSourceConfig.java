@@ -37,7 +37,11 @@ class DataSourceConfig {
     @Value("${db.schema}")
     private String DB_SCHEMA;
 
-    private static final boolean REINIT_DB_ON_START = false;
+    @Value("${db.hibernate.hbm2ddl.auto}")
+    private String DB_HBM2DLL_AUTO;
+
+    @Value("${db.show_sql}")
+    private String DB_SHOWSQL;
 
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
@@ -78,8 +82,8 @@ class DataSourceConfig {
         Properties properties = new Properties();
         properties.setProperty("hibernate.dialect", DB_DIALECT);
         properties.setProperty("hibernate.default_schema", DB_SCHEMA);
-        properties.setProperty("hibernate.hbm2ddl.auto", "create");
-        properties.setProperty("hibernate.show_sql", "true");
+        properties.setProperty("hibernate.hbm2ddl.auto", DB_HBM2DLL_AUTO);
+        properties.setProperty("hibernate.show_sql", DB_SHOWSQL);
         return properties;
     }
 

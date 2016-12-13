@@ -1,5 +1,6 @@
 package cz.cvut.fel.aos.config;
 
+import com.google.maps.GeoApiContext;
 import cz.cvut.fel.aos.dao.FlightEntityDao;
 import cz.cvut.fel.aos.dao.GenericEntityDao;
 import cz.cvut.fel.aos.entities.DestinationEntity;
@@ -12,12 +13,12 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 @Configuration
-@Import({DataConfig.class})
+@Import({DataConfig.class, SecurityConfig.class})
 public class ServiceConfig {
 
     @Bean
-    public DestinationService destinationService(GenericEntityDao<DestinationEntity> destinationDao) {
-        return new DestinationService(destinationDao);
+    public DestinationService destinationService(GenericEntityDao<DestinationEntity> destinationDao, GeoApiContext geoApiContext) {
+        return new DestinationService(destinationDao, geoApiContext);
     }
 
     @Bean
@@ -28,6 +29,11 @@ public class ServiceConfig {
     @Bean
     public ReservationService reservationService(GenericEntityDao<ReservationEntity> reservationEntityDao) {
         return new ReservationService(reservationEntityDao);
+    }
+
+    @Bean
+    public GeoApiContext geoApiContext() {
+        return new GeoApiContext().setApiKey("AIzaSyBQiMZewbukKwq5O6bylOfAixQwrtPfqNY");
     }
 
     @Bean

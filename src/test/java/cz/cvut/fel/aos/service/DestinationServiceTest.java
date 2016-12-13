@@ -1,45 +1,24 @@
 package cz.cvut.fel.aos.service;
 
-import cz.cvut.fel.aos.config.ServiceConfig;
-import cz.cvut.fel.aos.dao.GenericEntityDao;
 import cz.cvut.fel.aos.entities.DestinationEntity;
 import cz.cvut.fel.aos.resource.params.QueryParams;
-import cz.cvut.fel.aos.test.AbstractDatabaseTest;
-import org.junit.Before;
 import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
 
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.*;
 
-@ContextConfiguration(classes = {ServiceConfig.class})
-public class DestinationServiceTest extends AbstractDatabaseTest {
-
-    @Autowired
-    private GenericEntityDao<DestinationEntity> destinationEntityDao;
-
-    @Autowired
-    private DestinationService destinationService;
-
-    @Before
-    public void setUp() {
-        executeInTransaction(() -> {
-            destinationEntityDao.getAll().stream().forEach(destinationEntityDao::delete);
-        });
-    }
+public class DestinationServiceTest extends AbstractServiceTest {
 
     @Test
     public void getsAll() {
-        executeInTransaction(() -> {
-            destinationEntityDao.create(DestinationEntity.builder().name("Prague").build());
-            destinationEntityDao.create(DestinationEntity.builder().name("Brno").build());
-            destinationEntityDao.create(DestinationEntity.builder().name("Berlin").build());
-            destinationEntityDao.create(DestinationEntity.builder().name("London").build());
-        });
+        createEntities(
+                DestinationEntity.builder().name("Prague").build(),
+                DestinationEntity.builder().name("Brno").build(),
+                DestinationEntity.builder().name("Berlin").build(),
+                DestinationEntity.builder().name("London").build()
+        );
         List<DestinationEntity> loaded = destinationService.getAll(new QueryParams()).getResults();
         assertThat(loaded, hasSize(4));
     }
@@ -50,6 +29,15 @@ public class DestinationServiceTest extends AbstractDatabaseTest {
         destinationService.create(entity);
         DestinationEntity loaded = destinationService.get(entity.getId());
         assertThat(loaded, equalTo(entity));
+    }
+
+    @Test
+    public void enhancesByGeoApi() {
+        DestinationEntity entity = DestinationEntity.builder().name("Prague").build();
+        destinationService.create(entity);
+        DestinationEntity loaded = destinationService.get(entity.getId());
+        assertThat(loaded.getLatitude(), is(not(0f)));
+        assertThat(loaded.getLongitude(), is(not(0f)));
     }
 
     @Test

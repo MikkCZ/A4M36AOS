@@ -37,7 +37,7 @@ public class FlightResourceController {
         Page<FlightEntity> results = flightService.getAll(queryParams, TimeRangeFilter.fromXFilter(xFilter));
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add("X-Count-records", results.getCount().toString());
-        return new ResponseEntity(results.getResults(), httpHeaders, HttpStatus.OK);
+        return new ResponseEntity<>(results.getResults(), httpHeaders, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces={MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
