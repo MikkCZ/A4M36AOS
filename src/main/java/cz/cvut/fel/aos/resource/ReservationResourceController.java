@@ -4,6 +4,7 @@ import cz.cvut.fel.aos.entities.ReservationEntity;
 import cz.cvut.fel.aos.exceptions.InvalidReservationOperationException;
 import cz.cvut.fel.aos.resource.pages.Page;
 import cz.cvut.fel.aos.resource.params.QueryParams;
+import cz.cvut.fel.aos.resource.params.StringDto;
 import cz.cvut.fel.aos.service.ReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -36,7 +37,7 @@ public class ReservationResourceController {
         Page<ReservationEntity> results = reservationService.getAll(queryParams);
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add("X-Count-records", results.getCount().toString());
-        return new ResponseEntity(results.getResults(), httpHeaders, HttpStatus.OK);
+        return new ResponseEntity<>(results.getResults(), httpHeaders, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces={MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
@@ -71,6 +72,12 @@ public class ReservationResourceController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void payment(@PathVariable("id") int id) {
         reservationService.pay(id);
+    }
+
+    @RequestMapping(value = "/{id}/print", method = RequestMethod.POST, produces={MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public StringDto print(@PathVariable("id") int id) {
+        // TODO: call print service here
+        return new StringDto("not implemented yet");
     }
 
     @ExceptionHandler(value = InvalidReservationOperationException.class)
