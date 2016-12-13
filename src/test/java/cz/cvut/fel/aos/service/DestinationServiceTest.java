@@ -13,8 +13,7 @@ import org.springframework.test.context.ContextConfiguration;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.*;
 
 @ContextConfiguration(classes = {ServiceConfig.class})
 public class DestinationServiceTest extends AbstractDatabaseTest {
@@ -50,6 +49,15 @@ public class DestinationServiceTest extends AbstractDatabaseTest {
         destinationService.create(entity);
         DestinationEntity loaded = destinationService.get(entity.getId());
         assertThat(loaded, equalTo(entity));
+    }
+
+    @Test
+    public void enhancesByGeoApi() {
+        DestinationEntity entity = DestinationEntity.builder().name("Prague").build();
+        destinationService.create(entity);
+        DestinationEntity loaded = destinationService.get(entity.getId());
+        assertThat(loaded.getLatitude(), is(not(0f)));
+        assertThat(loaded.getLongitude(), is(not(0f)));
     }
 
     @Test
