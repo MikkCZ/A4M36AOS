@@ -14,7 +14,7 @@ public class DataConfig {
 
     @Bean
     public GenericEntityDao<DestinationEntity> destinationEntityDao() {
-        return new GenericEntityDao(DestinationEntity.class);
+        return new GenericEntityDao<>(DestinationEntity.class);
     }
 
     @Bean
@@ -24,7 +24,7 @@ public class DataConfig {
 
     @Bean
     public GenericEntityDao<ReservationEntity> reservationEntityDao() {
-        return new GenericEntityDao(ReservationEntity.class);
+        return new GenericEntityDao<>(ReservationEntity.class);
     }
 
 }

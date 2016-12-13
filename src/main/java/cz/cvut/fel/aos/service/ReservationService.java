@@ -23,7 +23,7 @@ public class ReservationService extends GenericService<ReservationEntity> {
     }
 
     public void create(ReservationEntity reservationEntity) {
-        int reservedSeats = reservationEntity.getFlight().getReservations().stream().mapToInt(r -> r.getSeats()).sum();
+        int reservedSeats = reservationEntity.getFlight().getReservations().stream().mapToInt(ReservationEntity::getSeats).sum();
         int seatsAvailable = reservationEntity.getFlight().getSeats() - reservedSeats;
         if (seatsAvailable < reservationEntity.getSeats()) {
             throw new InvalidReservationOperationException();

@@ -8,6 +8,8 @@ db:
   user: 'airline'
   pass: 'airline'
   schema: 'public'
+  hibernate.hbm2ddl.auto: 'create'
+  show_sql: 'true'
 
 spring:
   jackson:
