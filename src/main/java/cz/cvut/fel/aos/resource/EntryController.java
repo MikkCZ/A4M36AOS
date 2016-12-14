@@ -35,4 +35,18 @@ public class EntryController {
         }
         return mav;
     }
+
+    @RequestMapping(value = "/flight/all", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
+    public String flghtsPoint() {
+        return "allFlights";
+    }
+
+    @RequestMapping(value = "/flight/new", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
+    public ModelAndView flightsPoint(@RequestParam Map<String,String> allRequestParams) {
+        ModelAndView mav = new ModelAndView("newFlight");
+        if (allRequestParams.containsKey("id")) {
+            mav.addObject("flight_id", allRequestParams.get("id"));
+        }
+        return mav;
+    }
 }
