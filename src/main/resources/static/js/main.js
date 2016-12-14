@@ -11,7 +11,7 @@ function httpGetAsync(theUrl, callback) {
     xhr.open("GET", theUrl, true); // true for asynchronous
     xhr.setRequestHeader("Accept", "application/json");
     // xhr.setRequestHeader("Authorization", "Basic " + window.btoa(encodeURIComponent("admin:admin")));
-    xhr.setRequestHeader("Authorization", "Basic admin:admin");
+    xhr.setRequestHeader("Authorization", "Basic YWRtaW46YWRtaW4=");
     xhr.send(null);
 }
 
