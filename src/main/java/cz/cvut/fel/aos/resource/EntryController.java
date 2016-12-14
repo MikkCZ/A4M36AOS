@@ -17,4 +17,14 @@ public class EntryController {
     public String helpPoint() {
         return "help";
     }
+
+    @RequestMapping(value = "/destination/all", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
+    public String destinsPoint() {
+        return "allDestinations";
+    }
+
+    @RequestMapping(value = "/destination/new", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
+    public String destinationPoint() {
+        return "newDestination";
+    }
 }
