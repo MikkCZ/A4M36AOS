@@ -14,7 +14,8 @@ function httpAsync(request, url, callback) {
 }
 
 function deleteDestination(e) {
-    var destinationID = e.srcElement.getAttribute('x-id');
+    var srcElem = e.target || e.srcElement;
+    var destinationID = srcElem.getAttribute('x-id');
     var destinationURL = '/destination/'+destinationID;
     httpAsync("DELETE", destinationURL, function (data) {console.log(data); window.location.reload()});
 }
