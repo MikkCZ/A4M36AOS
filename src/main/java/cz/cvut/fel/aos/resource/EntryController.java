@@ -37,15 +37,29 @@ public class EntryController {
     }
 
     @RequestMapping(value = "/flight/all", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
-    public String flghtsPoint() {
+    public String flightsPoint() {
         return "allFlights";
     }
 
     @RequestMapping(value = "/flight/new", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
-    public ModelAndView flightsPoint(@RequestParam Map<String,String> allRequestParams) {
+    public ModelAndView flightPoint(@RequestParam Map<String,String> allRequestParams) {
         ModelAndView mav = new ModelAndView("newFlight");
         if (allRequestParams.containsKey("id")) {
             mav.addObject("flight_id", allRequestParams.get("id"));
+        }
+        return mav;
+    }
+
+    @RequestMapping(value = "/reservation/all", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
+    public String reservationsPoint() {
+        return "allReservations";
+    }
+
+    @RequestMapping(value = "/reservation/new", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
+    public ModelAndView reservationPoint(@RequestParam Map<String,String> allRequestParams) {
+        ModelAndView mav = new ModelAndView("newReservation");
+        if (allRequestParams.containsKey("id")) {
+            mav.addObject("reservation_id", allRequestParams.get("id"));
         }
         return mav;
     }

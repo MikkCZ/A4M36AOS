@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head lang="en">
+    <title>Airline service with Spring Boot</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link th:href="@{../css/default.css}" rel="stylesheet"/>
+    <link th:href="@{../css/bootstrap.min.css}" rel="stylesheet"/>
+    <link th:href="@{../css/bootstrap-theme.min.css}" rel="stylesheet"/>
+    <script th:src="@{../js/jquery-3.1.1.min.js}"></script>
+    <script th:src="@{../js/bootstrap.min.js}"></script>
+    <script th:src="@{../js/main.js}"></script>
+    <!--<script th:src="@{js/npm.js}"></script>-->
+</head>
+<body>
+<div class="container">
+    <h1>Reservation <span th:text="${reservation_id}" th:unless="${reservation_id == null}"></span></h1>
+
+    <form class="form-horizontal" id="reservation">
+        <div class="form-group" th:unless="${reservation_id == null}">
+            <label for="id" class="col-sm-2 control-label">Id</label>
+            <div class="col-sm-10">
+                <input type="number" disabled="disabled" class="form-control" id="id" th:value="${reservation_id}" />
+            </div>
+        </div>
+        <div class="form-group" th:unless="${reservation_id == null}">
+            <label for="password" class="col-sm-2 control-label">Id</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="password" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="flight" class="col-sm-2 control-label">Flight</label>
+            <div class="col-sm-10">
+                <input type="number" class="form-control" id="flight" placeholder="Flight" />
+                <a href="/flight/all" target="_blank">List</a>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="seats" class="col-sm-2 control-label">Seats</label>
+            <div class="col-sm-10">
+                <input type="number" class="form-control" id="seats" placeholder="Seats" />
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <button type="submit" class="btn btn-primary">Send</button>
+                <a href="../../" class="btn btn-default">Back</a>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script th:src="@{../js/new-reservation.js}"></script>
+</body>
+</html>

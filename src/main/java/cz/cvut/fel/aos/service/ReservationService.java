@@ -2,8 +2,11 @@ package cz.cvut.fel.aos.service;
 
 import cz.cvut.fel.aos.dao.GenericEntityDao;
 import cz.cvut.fel.aos.entities.ReservationEntity;
+import cz.cvut.fel.aos.entities.ReservationState;
 import cz.cvut.fel.aos.exceptions.InvalidReservationOperationException;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.ZonedDateTime;
 
 import static cz.cvut.fel.aos.entities.ReservationState.CANCELED;
 import static cz.cvut.fel.aos.entities.ReservationState.NEW;
@@ -28,6 +31,8 @@ public class ReservationService extends GenericService<ReservationEntity> {
         if (seatsAvailable < reservationEntity.getSeats()) {
             throw new InvalidReservationOperationException();
         }
+        reservationEntity.setState(ReservationState.NEW);
+        reservationEntity.setCreated(ZonedDateTime.now());
         entityDao.create(reservationEntity);
     }
 
