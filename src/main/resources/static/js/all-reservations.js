@@ -1,10 +1,3 @@
-function deleteReservation(e) {
-    var srcElem = e.target || e.srcElement;
-    var reservationsId = srcElem.getAttribute('x-id');
-    var reservationURL = '/reservation/'+reservationsId;
-    httpAsync("DELETE", reservationURL, null, function (data) {console.log(data); window.location.reload()});
-}
-
 function payReservation(e) {
     var srcElem = e.target || e.srcElement;
     var reservationsId = srcElem.getAttribute('x-id');
@@ -12,7 +5,7 @@ function payReservation(e) {
     httpAsync("POST", reservationURL, null, function (data) {console.log(data); window.location.reload()});
 }
 
-httpAsync("GET", "/reservation/", null, function (data) {
+httpAsync("GET", "/reservation/", null, null, function (data) {
     data = JSON.parse(data)
     var table = document.getElementById("reservations");
 
@@ -33,13 +26,6 @@ httpAsync("GET", "/reservation/", null, function (data) {
             buttPay.id = 'payReservation';
             buttPay.setAttribute("x-id", data[i]["id"]);
             buttPay.addEventListener("click", payReservation, false);
-
-            var buttDel = document.createElement('button');
-            buttDel.appendChild(document.createTextNode('Delete'));
-            buttDel.className = 'btn btn-danger right-margin-2em';
-            buttDel.id = 'deleteReservation';
-            buttDel.setAttribute("x-id", data[i]["id"]);
-            buttDel.addEventListener("click", deleteReservation, false);
 
             // create row with cells
             var row = table.insertRow();
@@ -76,7 +62,6 @@ httpAsync("GET", "/reservation/", null, function (data) {
             cell6.innerHTML = data[i]["created"];
             cell7.appendChild(buttPutLink);
             cell7.appendChild(buttPay);
-            cell7.appendChild(buttDel);
         }
     }
 });

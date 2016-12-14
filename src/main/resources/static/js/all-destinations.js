@@ -2,10 +2,10 @@ function deleteDestination(e) {
     var srcElem = e.target || e.srcElement;
     var destinationID = srcElem.getAttribute('x-id');
     var destinationURL = '/destination/'+destinationID;
-    httpAsync("DELETE", destinationURL, null, function (data) {console.log(data); window.location.reload()});
+    httpAsync("DELETE", destinationURL, null, null, function (data) {console.log(data); window.location.reload()});
 }
 
-httpAsync("GET", "/destination/", null, function (data) {
+httpAsync("GET", "/destination/", null, null, function (data) {
     data = JSON.parse(data)
     var table = document.getElementById("destinations");
 

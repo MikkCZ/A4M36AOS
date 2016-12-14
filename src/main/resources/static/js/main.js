@@ -1,4 +1,4 @@
-function httpAsync(request, url, requestBody, callback) {
+function httpAsync(request, url, requestBody, xpassword, callback) {
     var xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function() {
         if (xhr.readyState == 4 && xhr.status == 200) {
@@ -10,6 +10,9 @@ function httpAsync(request, url, requestBody, callback) {
     xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
     // xhr.setRequestHeader("Authorization", "Basic " + window.btoa(encodeURIComponent("admin:admin")));
     xhr.setRequestHeader("Authorization", "Basic YWRtaW46YWRtaW4=");
+    if (xpassword != null) {
+        xhr.setRequestHeader("X-Password", xpassword);
+    }
     if (requestBody != null) {
         xhr.send(JSON.stringify(requestBody));
     } else {
