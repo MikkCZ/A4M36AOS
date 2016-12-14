@@ -10,11 +10,12 @@ function httpGetAsync(theUrl, callback) {
 
     xhr.open("GET", theUrl, true); // true for asynchronous
     xhr.setRequestHeader("Accept", "application/json");
-    xhr.setRequestHeader("Authorization", "Basic " + window.btoa(encodeURIComponent("admin:admin")));
+    // xhr.setRequestHeader("Authorization", "Basic " + window.btoa(encodeURIComponent("admin:admin")));
+    xhr.setRequestHeader("Authorization", "Basic admin:admin");
     xhr.send(null);
 }
 
-httpGetAsync("/destination", function (data) {
+httpGetAsync("/destination/", function (data) {
     console.log(data);
 
     data = {
