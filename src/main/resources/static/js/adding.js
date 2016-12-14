@@ -35,5 +35,5 @@ $('#destination').submit(function(e) {
     if(notEmpty){
         httpAsync("POST", "/destination/", destPairs, function (data) {console.log(data)});
     }
-    // e.preventDefault();
+    e.preventDefault();
 });
