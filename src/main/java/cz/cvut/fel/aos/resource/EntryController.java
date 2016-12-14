@@ -4,6 +4,10 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
+
+import java.util.Map;
 
 @Controller
 public class EntryController {
@@ -24,7 +28,11 @@ public class EntryController {
     }
 
     @RequestMapping(value = "/destination/new", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
-    public String destinationPoint() {
-        return "newDestination";
+    public ModelAndView destinationPoint(@RequestParam Map<String,String> allRequestParams) {
+        ModelAndView mav = new ModelAndView("newDestination");
+        if (allRequestParams.containsKey("id")) {
+            mav.addObject("destination_id", allRequestParams.get("id"));
+        }
+        return mav;
     }
 }
