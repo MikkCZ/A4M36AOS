@@ -33,7 +33,15 @@ $('#destination').submit(function(e) {
     console.log("Sending object", destPairs);
 
     if(notEmpty){
-        httpAsync("POST", "/destination/", destPairs, function (data) {console.log(data)});
+        httpAsync("POST", "/destination/", destPairs, function (data) {
+            console.log(data);
+            for ( var i = 0; i < form.elements.length; i++ ) {
+                var fe = form.elements[i];
+                if(fe.value != ""){
+                    fe.value = "";
+                }
+            }
+        });
     }
     e.preventDefault();
 });
