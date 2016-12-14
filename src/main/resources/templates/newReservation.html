@@ -28,14 +28,14 @@
                 <input type="password" class="form-control" id="password" />
             </div>
         </div>
-        <div class="form-group">
+        <div class="form-group" th:unless="${reservation_id != null}">
             <label for="flight" class="col-sm-2 control-label">Flight</label>
             <div class="col-sm-10">
                 <input type="number" class="form-control" id="flight" placeholder="Flight" />
                 <a href="/flight/all" target="_blank">List</a>
             </div>
         </div>
-        <div class="form-group">
+        <div class="form-group" th:unless="${reservation_id != null}">
             <label for="seats" class="col-sm-2 control-label">Seats</label>
             <div class="col-sm-10">
                 <input type="number" class="form-control" id="seats" placeholder="Seats" />
@@ -43,9 +43,10 @@
         </div>
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
-                <button type="submit" class="btn btn-primary">Send</button>
+                <button type="submit" class="btn btn-primary" th:unless="${reservation_id != null}">Send</button>
                 <a href="../../" class="btn btn-default">Back</a>
-                <button id="deleteReservation" class="btn btn-danger" th:attr="x-id='\''+#{reservation_id}+'\''" th:unless="${reservation_id == null}">Delete</button>
+                <button type="submit" class="btn btn-danger" th:attr="x-id=${reservation_id}" th:unless="${reservation_id == null}">Cancel</button>
+                <button id="deleteReservation" class="btn btn-danger" th:attr="x-id=${reservation_id}" th:unless="${reservation_id == null}">Delete</button>
             </div>
         </div>
     </form>

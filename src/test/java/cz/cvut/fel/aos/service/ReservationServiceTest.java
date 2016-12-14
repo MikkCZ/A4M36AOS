@@ -60,8 +60,8 @@ public class ReservationServiceTest extends AbstractServiceTest {
         executeInTransaction(() -> {
             reservationService.updateWithPassword(entity.getId(), ReservationEntity.builder().state(ReservationState.NEW).build(), password);
             assertThat(reservationEntityDao.findById(entity.getId()).getState(), is(not(ReservationState.NEW)));
-            reservationService.updateWithPassword(entity.getId(), ReservationEntity.builder().state(ReservationState.CANCELED).build(), password);
-            assertThat(reservationEntityDao.findById(entity.getId()).getState(), is(ReservationState.CANCELED));
+            reservationService.updateWithPassword(entity.getId(), ReservationEntity.builder().state(ReservationState.CANCELLED).build(), password);
+            assertThat(reservationEntityDao.findById(entity.getId()).getState(), is(ReservationState.CANCELLED));
         });
     }
 

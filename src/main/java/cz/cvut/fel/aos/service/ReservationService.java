@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.ZonedDateTime;
 
-import static cz.cvut.fel.aos.entities.ReservationState.CANCELED;
+import static cz.cvut.fel.aos.entities.ReservationState.CANCELLED;
 import static cz.cvut.fel.aos.entities.ReservationState.NEW;
 import static cz.cvut.fel.aos.entities.ReservationState.PAID;
 
@@ -39,8 +39,8 @@ public class ReservationService extends GenericService<ReservationEntity> {
     public void updateWithPassword(int id, ReservationEntity reservationEntity, String password) {
         ReservationEntity original = get(id);
         checkPassword(original, password);
-        if (reservationEntity.getState() == CANCELED) {
-            original.setState(CANCELED);
+        if (reservationEntity.getState() == CANCELLED) {
+            original.setState(CANCELLED);
         }
         entityDao.update(original);
     }

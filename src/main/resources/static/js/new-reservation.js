@@ -1,7 +1,7 @@
 function deleteReservation(e) {
     var srcElem = e.target || e.srcElement;
-    var reservationsId = srcElem.getAttribute('x-id');
-    var reservationURL = '/reservation/'+reservationsId;
+    var reservationId = srcElem.getAttribute('x-id');
+    var reservationURL = '/reservation/'+reservationId;
     var form = document.getElementById("reservation");
     var password = null;
     for ( var i = 0; i < form.elements.length; i++ ) {
@@ -22,14 +22,14 @@ $('#reservation').submit(function(e) {
     e.preventDefault();
     var form = document.getElementById("reservation");
     var notEmpty = false;
-    var updateId = -1;
+    var cancelId = -1;
     var password = null;
     var reservationPairs = {};
     for ( var i = 0; i < form.elements.length; i++ ) {
         var fe = form.elements[i];
         if(fe.id != "") {
             if (fe.id == "id") {
-                updateId = fe.value;
+                cancelId = fe.value;
             } else if (fe.id == "password") {
                 password = fe.value;
             } else {
@@ -43,8 +43,9 @@ $('#reservation').submit(function(e) {
     console.log("Sending object", reservationPairs);
 
     if(notEmpty){
-        if (updateId > -1) {
-            httpAsync("PUT", "/reservation/"+updateId, reservationPairs, password, function (data) {
+        if (cancelId > -1) {
+            reservationPairs["state"] = "CANCELLED";
+            httpAsync("PUT", "/reservation/"+cancelId, reservationPairs, password, function (data) {
                 console.log(data);
                 for ( var i = 0; i < form.elements.length; i++ ) {
                     var fe = form.elements[i];
