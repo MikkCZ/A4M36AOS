@@ -1,23 +1,35 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head lang="en">
-
     <title>Airline service with Spring Boot</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-
+    <link th:href="@{css/default.css}" rel="stylesheet"/>
     <link th:href="@{css/bootstrap.min.css}" rel="stylesheet"/>
     <link th:href="@{css/bootstrap-theme.min.css}" rel="stylesheet"/>
     <script th:src="@{js/jquery-3.1.1.min.js}"></script>
     <script th:src="@{js/bootstrap.min.js}"></script>
-    <script th:src="@{js/npm.js}"></script>
-
-    <link th:href="@{css/default.css}" rel="stylesheet"/>
-    <script th:src="@{js/main.js}"></script>
+    <!--<script th:src="@{js/npm.js}"></script>-->
 </head>
 <body>
 <div class="container">
-    <h1>Welcome to our Airline Service!</h1>
-    <h2>Where would you like to fly?</h2>
+    <h1>Welcome to our Airline Service :-)</h1>
+    <h2>Destinations on list</h2>
+    <table class="table table-striped" id="destinations">
+        <thead><tr><th>ID</th><th>Name</th><th>Latitude</th><th>Longitude</th></tr></thead>
+        <tbody></tbody>
+    </table>
+    <h2>Flights on list</h2>
+    <table class="table table-striped" id="flights">
+        <thead><tr><th>ID</th><th>Date</th><th>From</th><th>To</th><th>Distance</th><th>Price</th><th>Seats</th><th>Name</th></tr></thead>
+        <tbody></tbody>
+    </table>
+    <h2>Reservations on list</h2>
+    <table class="table table-striped" id="reservations">
+        <thead><tr><th>ID</th><th>Seats</th><th>Password</th><th>Created</th><th>Flight</th><th>State</th></tr></thead>
+        <tbody></tbody>
+    </table>
 </div>
+
+<script th:src="@{js/main.js}"></script>
 </body>
 </html>
