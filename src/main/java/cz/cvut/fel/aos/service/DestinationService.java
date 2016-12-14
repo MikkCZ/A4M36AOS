@@ -28,6 +28,7 @@ public class DestinationService extends GenericService<DestinationEntity> {
 
     public void update(int id, DestinationEntity destinationEntity) {
         destinationEntity.setId(id);
+        enhanceByGeoApi(destinationEntity);
         entityDao.update(destinationEntity);
     }
 
