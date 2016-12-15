@@ -50,6 +50,16 @@ public class EntryController {
         return mav;
     }
 
+    @RequestMapping(value = "/reservation/cross", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
+    public String reservationsCross() {
+        return "reservationCrossroad";
+    }
+
+    @RequestMapping(value = "/reservation/pass", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
+    public String reservationsPass() {
+        return "reservationPassword";
+    }
+
     @RequestMapping(value = "/reservation/all", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
     public String reservationsPoint() {
         return "allReservations";

@@ -1,6 +1,7 @@
 function httpAsync(request, url, requestBody, xpassword, callback) {
     var xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function() {
+        console.log("Response status: ",xhr.status)
         if (xhr.readyState == 4 && xhr.status == 200) {
             callback(xhr.responseText);
         }
