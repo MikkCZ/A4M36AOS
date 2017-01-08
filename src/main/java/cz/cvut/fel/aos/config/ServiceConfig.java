@@ -8,13 +8,18 @@ import cz.cvut.fel.aos.entities.ReservationEntity;
 import cz.cvut.fel.aos.service.DestinationService;
 import cz.cvut.fel.aos.service.FlightService;
 import cz.cvut.fel.aos.service.ReservationService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.core.env.Environment;
 
 @Configuration
 @Import({DataConfig.class, SecurityConfig.class})
 public class ServiceConfig {
+
+    @Autowired
+    private Environment environment;
 
     @Bean
     public DestinationService destinationService(GenericEntityDao<DestinationEntity> destinationDao, GeoApiContext geoApiContext) {
@@ -33,7 +38,7 @@ public class ServiceConfig {
 
     @Bean
     public GeoApiContext geoApiContext() {
-        return new GeoApiContext().setApiKey("AIzaSyBQiMZewbukKwq5O6bylOfAixQwrtPfqNY");
+        return new GeoApiContext().setApiKey(environment.getRequiredProperty("google.map.api.key"));
     }
 
     @Bean
