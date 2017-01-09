@@ -27,3 +27,6 @@ google.map.api.key: 'AIzaSyBQiMZewbukKwq5O6bylOfAixQwrtPfqNY'
 
 jms:
   destination: 'mailbox'
+
+printservice:
+  path: 'http://localhost:8001/print'

@@ -19,10 +19,12 @@ import static cz.cvut.fel.aos.entities.ReservationState.*;
 public class ReservationService extends GenericService<ReservationEntity> {
 
     private final ObjectMapper objectMapper;
+    private final String printServicePath;
 
-    public ReservationService(GenericEntityDao<ReservationEntity> entityDao, ObjectMapper objectMapper) {
+    public ReservationService(GenericEntityDao<ReservationEntity> entityDao, ObjectMapper objectMapper, String printServicePath) {
         super(entityDao);
         this.objectMapper = objectMapper;
+        this.printServicePath = printServicePath;
     }
 
     public ReservationEntity getWithPassword(int id, String password) {
@@ -61,7 +63,7 @@ public class ReservationService extends GenericService<ReservationEntity> {
         RestTemplate restTemplate = new RestTemplate();
         try {
             restTemplate.exchange(
-                    "http://localhost:8001/print",
+                    printServicePath,
                     HttpMethod.POST,
                     new HttpEntity<String>(objectMapper.writeValueAsString(get(id))),
                     String.class

@@ -10,6 +10,7 @@ import cz.cvut.fel.aos.service.DestinationService;
 import cz.cvut.fel.aos.service.FlightService;
 import cz.cvut.fel.aos.service.ReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -18,6 +19,9 @@ import org.springframework.core.env.Environment;
 @Configuration
 @Import({DataConfig.class, SecurityConfig.class})
 public class ServiceConfig {
+
+    @Value("${printservice.path}")
+    private String printServicePath;
 
     @Autowired
     private Environment environment;
@@ -37,7 +41,7 @@ public class ServiceConfig {
 
     @Bean
     public ReservationService reservationService(GenericEntityDao<ReservationEntity> reservationEntityDao) {
-        return new ReservationService(reservationEntityDao, objectMapper);
+        return new ReservationService(reservationEntityDao, objectMapper, printServicePath);
     }
 
     @Bean
