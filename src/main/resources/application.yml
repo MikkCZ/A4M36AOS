@@ -15,8 +15,15 @@ spring:
   jackson:
     serialization:
       write_dates_as_timestamps: false
+  activemq:
+    broker-url: 'tcp://0.0.0.0:61616'
+    user: 'admin'
+    password: 'activemq'
 
 spring.thymeleaf.cache: false
 spring.thymeleaf.mode: HTML5
 
 google.map.api.key: 'AIzaSyBQiMZewbukKwq5O6bylOfAixQwrtPfqNY'
+
+jms:
+  destination: 'mailbox'

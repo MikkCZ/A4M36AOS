@@ -1,5 +1,11 @@
 server:
   port: 8001
 
+spring:
+  activemq:
+    broker-url: 'tcp://0.0.0.0:61616'
+    user: 'admin'
+    password: 'activemq'
+
 jms:
   destination: 'mailbox'

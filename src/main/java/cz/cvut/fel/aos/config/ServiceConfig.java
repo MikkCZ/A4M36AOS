@@ -15,7 +15,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.core.env.Environment;
 
 @Configuration
-@Import({DataConfig.class, SecurityConfig.class})
+@Import({DataConfig.class, SecurityConfig.class, JmsConfig.class})
 public class ServiceConfig {
 
     @Autowired
