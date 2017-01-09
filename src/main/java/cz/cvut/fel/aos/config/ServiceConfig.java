@@ -1,5 +1,6 @@
 package cz.cvut.fel.aos.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.maps.GeoApiContext;
 import cz.cvut.fel.aos.dao.FlightEntityDao;
 import cz.cvut.fel.aos.dao.GenericEntityDao;
@@ -15,11 +16,14 @@ import org.springframework.context.annotation.Import;
 import org.springframework.core.env.Environment;
 
 @Configuration
-@Import({DataConfig.class, SecurityConfig.class, JmsConfig.class})
+@Import({DataConfig.class, SecurityConfig.class})
 public class ServiceConfig {
 
     @Autowired
     private Environment environment;
+
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @Bean
     public DestinationService destinationService(GenericEntityDao<DestinationEntity> destinationDao, GeoApiContext geoApiContext) {
@@ -33,7 +37,7 @@ public class ServiceConfig {
 
     @Bean
     public ReservationService reservationService(GenericEntityDao<ReservationEntity> reservationEntityDao) {
-        return new ReservationService(reservationEntityDao);
+        return new ReservationService(reservationEntityDao, objectMapper);
     }
 
     @Bean

@@ -1,6 +1,5 @@
 package cz.cvut.fel.aos.service;
 
-import cz.cvut.fel.aos.config.ServiceConfig;
 import cz.cvut.fel.aos.entities.FlightEntity;
 import cz.cvut.fel.aos.entities.ReservationEntity;
 import cz.cvut.fel.aos.entities.ReservationState;
@@ -8,14 +7,12 @@ import cz.cvut.fel.aos.exceptions.InvalidReservationOperationException;
 import cz.cvut.fel.aos.resource.pages.Page;
 import cz.cvut.fel.aos.resource.params.QueryParams;
 import org.junit.Test;
-import org.springframework.test.context.ContextConfiguration;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNot.not;
 
-@ContextConfiguration(classes = {ServiceConfig.class})
 public class ReservationServiceTest extends AbstractServiceTest {
 
     @Test(expected = InvalidReservationOperationException.class)

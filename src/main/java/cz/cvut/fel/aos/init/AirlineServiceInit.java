@@ -1,5 +1,6 @@
 package cz.cvut.fel.aos.init;
 
+import cz.cvut.fel.aos.config.JmsConfig;
 import cz.cvut.fel.aos.config.RestConfig;
 import cz.cvut.fel.aos.config.ServiceConfig;
 import org.springframework.boot.SpringApplication;
@@ -14,7 +15,7 @@ import org.springframework.web.servlet.DispatcherServlet;
 
 @Configuration
 @SpringBootApplication
-@Import({EmbeddedServletContainerAutoConfiguration.class, ServiceConfig.class})
+@Import({EmbeddedServletContainerAutoConfiguration.class, ServiceConfig.class, JmsConfig.class})
 public class AirlineServiceInit {
 
     public static void main(String[] args) throws Exception {

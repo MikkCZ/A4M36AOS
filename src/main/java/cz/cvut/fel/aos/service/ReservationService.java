@@ -1,22 +1,28 @@
 package cz.cvut.fel.aos.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import cz.cvut.fel.aos.dao.GenericEntityDao;
 import cz.cvut.fel.aos.entities.ReservationEntity;
 import cz.cvut.fel.aos.entities.ReservationState;
 import cz.cvut.fel.aos.exceptions.InvalidReservationOperationException;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
 
 import java.time.ZonedDateTime;
 
-import static cz.cvut.fel.aos.entities.ReservationState.CANCELLED;
-import static cz.cvut.fel.aos.entities.ReservationState.NEW;
-import static cz.cvut.fel.aos.entities.ReservationState.PAID;
+import static cz.cvut.fel.aos.entities.ReservationState.*;
 
 @Transactional
 public class ReservationService extends GenericService<ReservationEntity> {
 
-    public ReservationService(GenericEntityDao<ReservationEntity> entityDao) {
+    private final ObjectMapper objectMapper;
+
+    public ReservationService(GenericEntityDao<ReservationEntity> entityDao, ObjectMapper objectMapper) {
         super(entityDao);
+        this.objectMapper = objectMapper;
     }
 
     public ReservationEntity getWithPassword(int id, String password) {
@@ -49,6 +55,20 @@ public class ReservationService extends GenericService<ReservationEntity> {
         ReservationEntity original = get(id);
         original.setState(PAID);
         entityDao.update(original);
+    }
+
+    public void mail(int id, String email) {
+        RestTemplate restTemplate = new RestTemplate();
+        try {
+            restTemplate.exchange(
+                    "http://localhost:8001/print",
+                    HttpMethod.POST,
+                    new HttpEntity<String>(objectMapper.writeValueAsString(get(id))),
+                    String.class
+            );
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
