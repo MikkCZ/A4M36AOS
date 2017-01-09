@@ -12,6 +12,19 @@
         </sourceRoots>
       </configuration>
     </facet>
+    <facet type="Spring" name="Spring">
+      <configuration>
+        <fileset id="fileset" name="Spring Application Context" removed="false">
+          <file>file://$MODULE_DIR$/src/main/java/cz/cvut/fel/aos/init/AirlineServiceInit.java</file>
+          <file>file://$MODULE_DIR$/src/main/java/cz/cvut/fel/aos/config/DataConfig.java</file>
+          <file>file://$MODULE_DIR$/src/main/java/cz/cvut/fel/aos/config/DataSourceConfig.java</file>
+          <file>file://$MODULE_DIR$/src/main/java/cz/cvut/fel/aos/config/JmsConfig.java</file>
+          <file>file://$MODULE_DIR$/src/main/java/cz/cvut/fel/aos/config/RestConfig.java</file>
+          <file>file://$MODULE_DIR$/src/main/java/cz/cvut/fel/aos/config/SecurityConfig.java</file>
+          <file>file://$MODULE_DIR$/src/main/java/cz/cvut/fel/aos/config/ServiceConfig.java</file>
+        </fileset>
+      </configuration>
+    </facet>
   </component>
   <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_8" inherit-compiler-output="false">
     <output url="file://$MODULE_DIR$/target/classes" />
