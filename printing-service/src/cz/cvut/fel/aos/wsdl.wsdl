@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding ="utf-8"?>
+<!-- 
+A4M36AOS
+2017-01-09
+Printing service
+
+Online WSDL 1.1 SOAP generator 0.2
+Julien Blitte
+ -->
+<definitions name="Printing service"
+	targetNamespace="cz.cvut.fel.a4m36aos.wsdl"
+	xmlns:tns="cz.cvut.fel.a4m36aos.wsdl"
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:xsd1="cz.cvut.fel.a4m36aos.xsd"
+	xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns="http://schemas.xmlsoap.org/wsdl/">
+<!-- definition of datatypes -->
+	<types>
+	<schema targetNamespace="cz.cvut.fel.a4m36aos.xsd" xmlns="http://www.w3.org/2000/10/XMLSchema">
+		<element name="json_reservation">
+		<complexType><all><element name="value" type="string" /></all></complexType>
+		</element>
+		<element name="result">
+		<complexType><all><element name="value" type="string" /></all></complexType>
+		</element>
+	</schema>
+	</types>
+<!-- response messages -->
+	<message name='returns_result'>
+	<part name='result' type='xsd:result'/>
+	</message>
+<!-- request messages -->
+	<message name='post_message'>
+	<part name='json_reservation' type='xsd:json_reservation'/>
+	</message>
+<!-- server's services -->
+	<portType name='PrintingService'>
+		<operation name='post_message'>
+		<input message='tns:post_message'/>
+		<output message='tns:returns_result'/>
+		</operation>
+	</portType>
+<!-- server encoding -->
+	<binding name='PrintingService_webservices' type='tns:PrintingService'>
+	<soap:binding style='rpc' transport='http://schemas.xmlsoap.org/soap/http'/>
+		<operation name='post_message'>
+		<soap:operation soapAction='urn:xmethods-delayed-quotes#post_message'/>
+		<input><soap:body use='encoded' namespace='urn:xmethods-delayed-quotes' encodingStyle='http://schemas.xmlsoap.org/soap/encoding/'/></input>
+		<output><soap:body use='encoded' namespace='urn:xmethods-delayed-quotes' encodingStyle='http://schemas.xmlsoap.org/soap/encoding/'/></output>
+		</operation>
+	</binding>
+<!-- access to service provider -->
+	<service name='stankmic'>
+	<port name='stankmic_0' binding='PrintingService_webservices'>
+	<soap:address location='http://127.0.0.1./test_soap/endpoint1.php'/>
+	</port>
+	<port name='stankmic_1' binding='PrintingService_webservices'>
+	<soap:address location='http://127.0.0.1./test_soap/endpoint2.php'/>
+	</port>
+	</service>
+</definitions>
+
