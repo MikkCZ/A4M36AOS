@@ -37,7 +37,7 @@ public class PrintingService {
         } catch (JsonProcessingException e) {
             log.error("Cannot convert and send message {}.", jsonstring, e);
         }
-        return "";
+        return "ABC";
     }
     
     private MessageConverter jacksonJmsMessageConverter() {
