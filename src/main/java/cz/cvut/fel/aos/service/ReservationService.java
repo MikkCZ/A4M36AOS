@@ -1,21 +1,20 @@
 package cz.cvut.fel.aos.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import cz.cvut.fel.aos.dao.GenericEntityDao;
 import cz.cvut.fel.aos.entities.ReservationEntity;
 import cz.cvut.fel.aos.entities.ReservationState;
 import cz.cvut.fel.aos.exceptions.InvalidReservationOperationException;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
+import cz.cvut.fel.aos.printclient.PrintingService_Service;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.RestTemplate;
 
 import java.time.ZonedDateTime;
 
 import static cz.cvut.fel.aos.entities.ReservationState.*;
 
 @Transactional
+@Slf4j
 public class ReservationService extends GenericService<ReservationEntity> {
 
     private final ObjectMapper objectMapper;
@@ -60,7 +59,7 @@ public class ReservationService extends GenericService<ReservationEntity> {
     }
 
     public void mail(int id, String email) {
-        RestTemplate restTemplate = new RestTemplate();
+        /*RestTemplate restTemplate = new RestTemplate();
         try {
             restTemplate.exchange(
                     printServicePath,
@@ -68,8 +67,14 @@ public class ReservationService extends GenericService<ReservationEntity> {
                     new HttpEntity<String>(objectMapper.writeValueAsString(get(id))),
                     String.class
             );
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
+        } catch (Exception e) {
+            log.error("Failed to connect to REST printing service.", e);
+        }*/
+        PrintingService_Service printingService_service = new PrintingService_Service();
+        try {
+            printingService_service.getPrintingServicePort().print(objectMapper.writeValueAsString(get(id)));
+        } catch (Exception e) {
+            log.error("Failed to connect to WS printing service.", e);
         }
     }
 
