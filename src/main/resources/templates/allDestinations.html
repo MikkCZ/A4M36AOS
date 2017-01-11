@@ -3,19 +3,12 @@
 <head lang="en">
     <title>Airline service with Spring Boot</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <!--<link th:href="@{../css/default.css}" rel="stylesheet"/>-->
-    <!--<link th:href="@{../css/bootstrap.min.css}" rel="stylesheet"/>-->
-    <!--<link th:href="@{../css/bootstrap-theme.min.css}" rel="stylesheet"/>-->
-    <!--<script th:src="@{../js/jquery-3.1.1.min.js}"></script>-->
-    <!--<script th:src="@{../js/bootstrap.min.js}"></script>-->
-    <!--<script th:src="@{../js/main.js}"></script>-->
-    <link href="../static/css/default.css" rel="stylesheet"/>
-    <link href="../static/css/bootstrap.min.css" rel="stylesheet"/>
-    <link href="../static/css/bootstrap-theme.min.css" rel="stylesheet"/>
-    <script src="../static/js/jquery-3.1.1.min.js"></script>
-    <script src="../static/js/bootstrap.min.js"></script>
-    <script src="../static/js/main.js"></script>
-    <!--<script th:src="@{js/npm.js}"></script>-->
+    <link th:href="@{../css/default.css}" rel="stylesheet"/>
+    <link th:href="@{../css/bootstrap.min.css}" rel="stylesheet"/>
+    <link th:href="@{../css/bootstrap-theme.min.css}" rel="stylesheet"/>
+    <script th:src="@{../js/jquery-3.1.1.min.js}"></script>
+    <script th:src="@{../js/bootstrap.min.js}"></script>
+    <script th:src="@{../js/main.js}"></script>
 </head>
 <body>
 <div class="container">
@@ -23,27 +16,45 @@
     <a href="/destination/new"><button class="btn btn-success">Add new destination</button></a>
 
     <div class="filtering">
-        <h1>Filtrování</h1>
+        <h3>Filtering</h3>
 
-        <h3>Filter</h3>
-        <h3>Order</h3>
-        <h3>Base</h3>
-        <h3>Offset</h3>
-        <h3>Filter</h3>
+        <h4>Filter</h4>
+        <h4>Order</h4>
+        <h4>Base</h4>
+        <h4>Offset</h4>
+        <h4>Count</h4>
 
-        if (fps["filter"]){
-        xhr.setRequestHeader("X-Filter", fps["filter"]);
-        }
-        if (fps["order"]){
-        xhr.setRequestHeader("X-Order", fps["order"]);
-        }
-        if (fps["base"] && fps["offset"]){
-        xhr.setRequestHeader("X-Base", fps["base"]);
-        xhr.setRequestHeader("X-Offset", fps["offset"]);
-        }
-        if (fps["count"]){
-        xhr.setRequestHeader("X-Count-records", fps["count"]);
-        }
+        <form class="form-horizontal">
+            <div class="form-group">
+                <label for="filter" class="col-sm-2 control-label">Filter</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="filter" placeholder="Filter"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="order" class="col-sm-2 control-label">Order</label>
+                <div class="col-sm-10">
+                    <input type="password" class="form-control" id="order" placeholder="Order"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="base" class="col-sm-2 control-label">Base</label>
+                <div class="col-sm-10">
+                    <input type="password" class="form-control" id="base" placeholder="Base"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="offset" class="col-sm-2 control-label">Offset</label>
+                <div class="col-sm-10">
+                    <input type="password" class="form-control" id="offset" placeholder="Offset"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <button type="submit" class="btn btn-default">Send</button>
+                </div>
+            </div>
+        </form>
     </div>
 
     <table class="table table-striped" id="destinations">
