@@ -3,7 +3,7 @@ function payReservation(e) {
     var srcElem = e.target || e.srcElement;
     var reservationsId = srcElem.getAttribute('x-id');
     var reservationURL = '/reservation/'+reservationsId+'/payment';
-    httpAsync("POST", reservationURL, null, null, function (data) {console.log(data); window.location.reload()});
+    httpAsync("POST", reservationURL, null, null, null, function (data) {console.log(data); window.location.reload()});
 }
 
 $('#crossing').submit(function(e) {
@@ -39,7 +39,7 @@ $('#passing').submit(function(e) {
     }
     console.log("Pass object", auth);
 
-    httpAsync("GET", "/reservation/"+auth[0], null, auth[1], function (data) {
+    httpAsync("GET", "/reservation/"+auth[0], null, auth[1], null, function (data) {
         // console.log(data)
         data = JSON.parse(data);
         var table = document.getElementById("reserv");

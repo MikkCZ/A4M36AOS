@@ -2,10 +2,10 @@ function deleteFlight(e) {
     var srcElem = e.target || e.srcElement;
     var flightId = srcElem.getAttribute('x-id');
     var flightURL = '/flight/'+flightId;
-    httpAsync("DELETE", flightURL, null, null, function (data) {console.log(data); window.location.reload()});
+    httpAsync("DELETE", flightURL, null, null, null, function (data) {console.log(data); window.location.reload()});
 }
 
-httpAsync("GET", "/flight/", null, null, function (data) {
+httpAsync("GET", "/flight/", null, null, null, function (data) {
     data = JSON.parse(data)
     var table = document.getElementById("flights");
 

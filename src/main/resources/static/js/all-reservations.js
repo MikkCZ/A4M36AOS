@@ -2,10 +2,10 @@ function payReservation(e) {
     var srcElem = e.target || e.srcElement;
     var reservationsId = srcElem.getAttribute('x-id');
     var reservationURL = '/reservation/'+reservationsId+'/payment';
-    httpAsync("POST", reservationURL, null, null, function (data) {console.log(data); window.location.reload()});
+    httpAsync("POST", reservationURL, null, null, null, function (data) {console.log(data); window.location.reload()});
 }
 
-httpAsync("GET", "/reservation/", null, null, function (data) {
+httpAsync("GET", "/reservation/", null, null, null, function (data) {
     data = JSON.parse(data)
     var table = document.getElementById("reservations");
 

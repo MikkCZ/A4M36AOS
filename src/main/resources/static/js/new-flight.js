@@ -20,7 +20,7 @@ $('#flight').submit(function(e) {
 
     if(notEmpty){
         if (updateId > -1) {
-            httpAsync("PUT", "/flight/"+updateId, flightPairs, null, function (data) {
+            httpAsync("PUT", "/flight/"+updateId, flightPairs, null, null, function (data) {
                 console.log(data);
                 for ( var i = 0; i < form.elements.length; i++ ) {
                     var fe = form.elements[i];
@@ -30,7 +30,7 @@ $('#flight').submit(function(e) {
                 }
             });
         } else {
-            httpAsync("POST", "/flight/", flightPairs, null, function (data) {
+            httpAsync("POST", "/flight/", flightPairs, null, null, function (data) {
                 console.log(data);
                 for ( var i = 0; i < form.elements.length; i++ ) {
                     var fe = form.elements[i];
