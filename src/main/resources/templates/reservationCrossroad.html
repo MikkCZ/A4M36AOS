@@ -9,32 +9,35 @@
     <script th:src="@{../js/jquery-3.1.1.min.js}"></script>
     <script th:src="@{../js/bootstrap.min.js}"></script>
     <script th:src="@{../js/main.js}"></script>
-    <!--<script th:src="@{js/npm.js}"></script>-->
 </head>
 <body>
 <div class="container">
     <h1>Login</h1>
 
-    <form class="form-horizontal" id="crossing">
-        <div class="form-group">
-            <label for="user" class="col-sm-2 control-label">Username</label>
-            <div class="col-sm-10">
-                <input type="text" class="form-control" id="user" />
+    <div class="well well-sm">
+        <form class="form-horizontal" id="crossing">
+            <div class="form-group">
+                <label for="user" class="col-sm-2 control-label">Username</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="user" />
+                </div>
             </div>
-        </div>
-        <div class="form-group">
-            <label for="pass" class="col-sm-2 control-label">Account password</label>
-            <div class="col-sm-10">
-                <input type="password" class="form-control" id="pass" />
+            <div class="form-group">
+                <label for="pass" class="col-sm-2 control-label">Password</label>
+                <div class="col-sm-10">
+                    <input type="password" class="form-control" id="pass" />
+                </div>
             </div>
-        </div>
-        <div class="form-group">
-            <div class="col-sm-offset-2 col-sm-10">
-                <button type="submit" class="btn btn-primary">Send</button>
-                <a href="../../" class="btn btn-default">Back</a>
+            <div class="form-group">
+                <div class="col-sm-2 text-right">
+                    <a href="/" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> Back</a>
+                </div>
+                <div class="col-sm-10">
+                    <button type="submit" class="btn btn-primary"><i class="glyphicon glyphicon-log-in"></i>&nbsp; Sign in</button>
+                </div>
             </div>
-        </div>
-    </form>
+        </form>
+    </div>
 </div>
 
 <script th:src="@{../js/cross-reservations.js}"></script>

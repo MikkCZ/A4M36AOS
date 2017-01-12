@@ -9,7 +9,6 @@
     <script th:src="@{../js/jquery-3.1.1.min.js}"></script>
     <script th:src="@{../js/bootstrap.min.js}"></script>
     <script th:src="@{../js/main.js}"></script>
-    <!--<script th:src="@{js/npm.js}"></script>-->
 </head>
 <body>
 <div class="container">
@@ -38,14 +37,14 @@
             <label for="from" class="col-sm-2 control-label">From</label>
             <div class="col-sm-10">
                 <input type="number" class="form-control" id="from" placeholder="From" />
-                <a href="/destination/all" target="_blank">List</a>
+                <a href="/destination/all" target="_blank" class="no-decor"><span class="label label-primary">List of destinations</span></a>
             </div>
         </div>
         <div class="form-group">
             <label for="to" class="col-sm-2 control-label">To</label>
             <div class="col-sm-10">
                 <input type="number" class="form-control" id="to" placeholder="To" />
-                <a href="/destination/all" target="_blank">List</a>
+                <a href="/destination/all" target="_blank" class="no-decor"><span class="label label-primary">List of destinations</span></a>
             </div>
         </div>
         <div class="form-group">
@@ -55,9 +54,11 @@
             </div>
         </div>
         <div class="form-group">
-            <div class="col-sm-offset-2 col-sm-10">
-                <button type="submit" class="btn btn-primary">Send</button>
-                <a href="../../" class="btn btn-default">Back</a>
+            <div class="col-sm-2 text-right">
+                <a href="/" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> Back</a>
+            </div>
+            <div class="col-sm-10">
+                <button type="submit" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-disk"></i> Save</button>
             </div>
         </div>
     </form>

@@ -10,8 +10,24 @@ table.table thead tr th {
     margin-right: 0.5em;
 }
 
+.bot-marg {
+    margin-bottom: 1em !important;
+}
+
+.right-float {
+    float: right;
+}
+
+.fixed-width {
+    width: 150px !important;
+}
+
+i {
+    font-size: 0.9em;
+}
+
 .container {
-    max-width: 940px;
+    /*max-width: 940px;*/
     padding: 2em 3em;
     margin: 0 auto 20px;
     background-color: #fff;
@@ -19,4 +35,13 @@ table.table thead tr th {
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
     border-radius: 5px;
+}
+
+a.no-decor {
+    text-decoration: none !important;
+}
+
+a span.label {
+    font-size: 0.83em;
+    font-weight: normal;
 }

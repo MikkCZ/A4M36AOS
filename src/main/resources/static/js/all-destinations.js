@@ -5,9 +5,16 @@ function deleteDestination(e) {
     httpAsync("DELETE", destinationURL, null, null, null, function (data) {console.log(data); window.location.reload()});
 }
 
-httpAsync("GET", "/destination/", null, null, null, function (data) {
-    data = JSON.parse(data)
-    var table = document.getElementById("destinations");
+function removeChildren(node) {
+    while (node.firstChild) {
+        node.removeChild(node.firstChild);
+    }
+}
+
+function fillTable(data) {
+    data = JSON.parse(data);
+    var tbody = document.getElementById("destination-tbody");
+    removeChildren(tbody);
 
     for(var i in data){
         if(data[i]["id"] != undefined){
@@ -34,7 +41,7 @@ httpAsync("GET", "/destination/", null, null, null, function (data) {
             buttDel.addEventListener("click", deleteDestination, false);
 
             // create row with cells
-            var row = table.insertRow();
+            var row = tbody.insertRow();
             var cell1 = row.insertCell(0);
             var cell2 = row.insertCell(1);
             var cell3 = row.insertCell(2);
@@ -50,50 +57,21 @@ httpAsync("GET", "/destination/", null, null, null, function (data) {
             cell5.appendChild(buttDel);
         }
     }
-});
+}
 
-// $('#destination').submit(function(e) {
-//     var form = document.getElementById("destination");
-//     var notEmpty = false;
-//     var updateId = -1;
-//     var destPairs = {};
-//     for ( var i = 0; i < form.elements.length; i++ ) {
-//         var fe = form.elements[i];
-//         if(fe.id != "") {
-//             if (fe.id == "id") {
-//                 updateId = fe.value;
-//             } else {
-//                 destPairs[fe.id] = fe.value;
-//             }
-//         }
-//         if(fe.value != ""){
-//             notEmpty = true;
-//         }
-//     }
-//     console.log("Sending object", destPairs);
-//
-//     if(notEmpty){
-//         if (updateId > -1) {
-//             httpAsync("PUT", "/destination/"+updateId, destPairs, null, null, function (data) {
-//                 console.log(data);
-//                 for ( var i = 0; i < form.elements.length; i++ ) {
-//                     var fe = form.elements[i];
-//                     if(fe.value != ""){
-//                         fe.value = "";
-//                     }
-//                 }
-//             });
-//         } else {
-//             httpAsync("POST", "/destination/", destPairs, null, null, function (data) {
-//                 console.log(data);
-//                 for ( var i = 0; i < form.elements.length; i++ ) {
-//                     var fe = form.elements[i];
-//                     if(fe.value != ""){
-//                         fe.value = "";
-//                     }
-//                 }
-//             });
-//         }
-//     }
-//     e.preventDefault();
-// });
+httpAsync("GET", "/destination/", null, null, null, fillTable);
+
+$('#destination-filter').submit(function(e) {
+    e.preventDefault();
+
+    var form = document.getElementById("destination-filter");
+    var values = {};
+    for ( var i = 0; i < form.elements.length; i++ ) {
+        var fe = form.elements[i];
+        if(fe.id != "" && fe.value != "") {
+            values[fe.id] = fe.value;
+        }
+    }
+    console.log("Destination filter", values);
+    httpAsync("GET", "/destination/", null, null, values, fillTable);
+});

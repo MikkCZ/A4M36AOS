@@ -5,9 +5,16 @@ function payReservation(e) {
     httpAsync("POST", reservationURL, null, null, null, function (data) {console.log(data); window.location.reload()});
 }
 
-httpAsync("GET", "/reservation/", null, null, null, function (data) {
-    data = JSON.parse(data)
-    var table = document.getElementById("reservations");
+function removeChildren(node) {
+    while (node.firstChild) {
+        node.removeChild(node.firstChild);
+    }
+}
+
+function fillTable(data) {
+    data = JSON.parse(data);
+    var tbody = document.getElementById("reservation-tbody");
+    removeChildren(tbody);
 
     for(var i in data){
         if(data[i]["id"] != undefined){
@@ -28,7 +35,7 @@ httpAsync("GET", "/reservation/", null, null, null, function (data) {
             buttPay.addEventListener("click", payReservation, false);
 
             // create row with cells
-            var row = table.insertRow();
+            var row = tbody.insertRow();
             var cell1 = row.insertCell(0);
             var cell2 = row.insertCell(1);
             var cell3 = row.insertCell(2);
@@ -64,4 +71,21 @@ httpAsync("GET", "/reservation/", null, null, null, function (data) {
             cell7.appendChild(buttPay);
         }
     }
+}
+
+httpAsync("GET", "/reservation/", null, null, null, fillTable);
+
+$('#flight-filter').submit(function(e) {
+    e.preventDefault();
+
+    var form = document.getElementById("reservation-filter");
+    var values = {};
+    for (var i = 0; i < form.elements.length; i++) {
+        var fe = form.elements[i];
+        if (fe.id != "" && fe.value != "") {
+            values[fe.id] = fe.value;
+        }
+    }
+    console.log("Reservation filter", values);
+    httpAsync("GET", "/reservation/", null, null, values, fillTable);
 });

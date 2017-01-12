@@ -12,19 +12,14 @@
 </head>
 <body>
 <div class="container">
-    <h1>Destinations on list</h1>
-    <a href="/destination/new"><button class="btn btn-success">Add new destination</button></a>
+    <h1>Destinations in database</h1>
+    <div class="bot-marg">
+        <a href="/"><button class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> Back</button></a>
+        <a href="/destination/new"><button class="btn btn-success"><i class="glyphicon glyphicon-plus"></i> Add new destination</button></a>
+    </div>
 
-    <div class="filtering">
-        <h3>Filtering</h3>
-
-        <h4>Filter</h4>
-        <h4>Order</h4>
-        <h4>Base</h4>
-        <h4>Offset</h4>
-        <h4>Count</h4>
-
-        <form class="form-horizontal">
+    <div class="well well-sm">
+        <form class="form-horizontal" id="destination-filter">
             <div class="form-group">
                 <label for="filter" class="col-sm-2 control-label">Filter</label>
                 <div class="col-sm-10">
@@ -34,24 +29,24 @@
             <div class="form-group">
                 <label for="order" class="col-sm-2 control-label">Order</label>
                 <div class="col-sm-10">
-                    <input type="password" class="form-control" id="order" placeholder="Order"/>
+                    <input type="text" class="form-control" id="order" placeholder="Order"/>
                 </div>
             </div>
             <div class="form-group">
                 <label for="base" class="col-sm-2 control-label">Base</label>
                 <div class="col-sm-10">
-                    <input type="password" class="form-control" id="base" placeholder="Base"/>
+                    <input type="text" class="form-control" id="base" placeholder="Base"/>
                 </div>
             </div>
             <div class="form-group">
                 <label for="offset" class="col-sm-2 control-label">Offset</label>
                 <div class="col-sm-10">
-                    <input type="password" class="form-control" id="offset" placeholder="Offset"/>
+                    <input type="text" class="form-control" id="offset" placeholder="Offset"/>
                 </div>
             </div>
-            <div class="form-group">
+            <div class="form-group" style="margin-bottom: 0">
                 <div class="col-sm-offset-2 col-sm-10">
-                    <button type="submit" class="btn btn-default">Send</button>
+                    <button type="submit" class="btn btn-primary">Update</button>
                 </div>
             </div>
         </form>
@@ -59,10 +54,10 @@
 
     <table class="table table-striped" id="destinations">
         <thead><tr><th>ID</th><th>Name</th><th>Latitude</th><th>Longitude</th><th>Options</th></tr></thead>
-        <tbody></tbody>
+        <tbody id="destination-tbody"></tbody>
     </table>
 </div>
 
-<script src="../static/js/all-destinations.js"></script>
+<script th:src="@{../js/all-destinations.js}"></script>
 </body>
 </html>
