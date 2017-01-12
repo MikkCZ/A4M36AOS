@@ -35,8 +35,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .antMatchers(HttpMethod.DELETE, "/reservation/**").hasAnyRole("ADMIN", "MANAGER").and().httpBasic();
 
-        http.authorizeRequests()
-                .antMatchers(HttpMethod.GET, "/airline-service/**").hasAnyRole("ADMIN", "MANAGER");
+//        http.authorizeRequests()
+//                .antMatchers(HttpMethod.GET, "/airline-service/**").hasAnyRole("ADMIN", "MANAGER");
     }
 
     @Autowired

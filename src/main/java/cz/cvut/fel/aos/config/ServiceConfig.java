@@ -9,6 +9,7 @@ import cz.cvut.fel.aos.entities.ReservationEntity;
 import cz.cvut.fel.aos.service.DestinationService;
 import cz.cvut.fel.aos.service.FlightService;
 import cz.cvut.fel.aos.service.ReservationService;
+import cz.cvut.fel.aos.socket.WebSocketConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -17,7 +18,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.core.env.Environment;
 
 @Configuration
-@Import({DataConfig.class, SecurityConfig.class})
+@Import({DataConfig.class, SecurityConfig.class, WebSocketConfig.class})
 public class ServiceConfig {
 
     @Value("${printservice.path}")
