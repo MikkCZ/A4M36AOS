@@ -94,20 +94,20 @@ function httpAsync(request, url, requestBody, xpassword, fps, callback) {
 //     $( "#send" ).click(function() { sendName(); });
 // });
 
-// var wsocket;
-// var serviceLocation = "ws://localhost:8000/websockets";
-//
-// function onMessageReceived(evt) {
-//     var msg = evt.data;
-//     var clients_label = document.getElementById("clients_count");
-//     clients_label.innerHTML = msg;
-// }
-//
-// function connectToServer() {
-//     wsocket = new WebSocket(serviceLocation);
-//     wsocket.onmessage = onMessageReceived;
-// }
-//
-// $(document).ready(function() {
-//     connectToServer();
-// });
+var wsocket;
+var serviceLocation = "ws://localhost:8000/websockets";
+
+function onMessageReceived(evt) {
+    var msg = evt.data;
+    var clients_label = document.getElementById("clients_count");
+    clients_label.innerHTML = msg;
+}
+
+function connectToServer() {
+    wsocket = new WebSocket(serviceLocation);
+    wsocket.onmessage = onMessageReceived;
+}
+
+$(document).ready(function() {
+    connectToServer();
+});
